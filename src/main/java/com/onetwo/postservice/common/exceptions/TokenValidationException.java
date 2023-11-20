@@ -1,6 +1,6 @@
 package com.onetwo.postservice.common.exceptions;
 
-import com.onetwo.myxservice.common.jwt.JwtCode;
+import com.onetwo.postservice.common.jwt.JwtCode;
 import lombok.Getter;
 
 @Getter
