@@ -52,4 +52,16 @@ public class Posting extends BaseDomain {
     public boolean isNotDeleted() {
         return !this.state;
     }
+
+    public boolean isDeleted() {
+        return this.state;
+    }
+
+    public boolean isSameUserId(String userId) {
+        return this.userId.equals(userId);
+    }
+
+    public void deletePosting() {
+        this.state = true;
+    }
 }

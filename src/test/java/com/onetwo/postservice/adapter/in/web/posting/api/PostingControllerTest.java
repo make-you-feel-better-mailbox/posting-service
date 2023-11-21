@@ -4,9 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onetwo.postservice.adapter.in.web.config.TestConfig;
 import com.onetwo.postservice.adapter.in.web.posting.mapper.PostingDtoMapper;
 import com.onetwo.postservice.adapter.in.web.posting.request.PostPostingRequest;
+import com.onetwo.postservice.adapter.in.web.posting.response.DeletePostingResponse;
 import com.onetwo.postservice.adapter.in.web.posting.response.PostPostingResponse;
+import com.onetwo.postservice.application.port.in.command.DeletePostingCommand;
 import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
+import com.onetwo.postservice.application.port.in.response.DeletePostingResponseDto;
 import com.onetwo.postservice.application.port.in.response.PostPostingResponseDto;
+import com.onetwo.postservice.application.port.in.usecase.DeletePostingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.PostPostingUseCase;
 import com.onetwo.postservice.common.GlobalUrl;
 import com.onetwo.postservice.common.config.SecurityConfig;
@@ -23,9 +27,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,6 +51,9 @@ class PostingControllerTest {
 
     @MockBean
     private PostPostingUseCase postPostingUseCase;
+
+    @MockBean
+    private DeletePostingUseCase deletePostingUseCase;
 
     @MockBean
     private PostingDtoMapper postingDtoMapper;
@@ -76,6 +83,28 @@ class PostingControllerTest {
                         .accept(MediaType.APPLICATION_JSON));
         //then
         resultActions.andExpect(status().isCreated())
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockUser(username = userId)
+    @DisplayName("[단위][Web Adapter] Posting 삭제 - 성공 테스트")
+    void deletePostingSuccessTest() throws Exception {
+        //given
+        DeletePostingCommand deletePostingCommand = new DeletePostingCommand(postingIdx, userId);
+        DeletePostingResponseDto deletePostingResponseDto = new DeletePostingResponseDto(true);
+        DeletePostingResponse deletePostingResponse = new DeletePostingResponse(true);
+
+        when(postingDtoMapper.deleteRequestToCommand(anyString(), anyLong())).thenReturn(deletePostingCommand);
+        when(deletePostingUseCase.deletePosting(any(DeletePostingCommand.class))).thenReturn(deletePostingResponseDto);
+        when(postingDtoMapper.dtoToDeleteResponse(any(DeletePostingResponseDto.class))).thenReturn(deletePostingResponse);
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                delete(GlobalUrl.POST_ROOT + "/{posting-id}", postingIdx)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+        //then
+        resultActions.andExpect(status().isOk())
                 .andDo(print());
     }
 }
