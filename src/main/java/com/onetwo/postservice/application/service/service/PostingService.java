@@ -2,10 +2,13 @@ package com.onetwo.postservice.application.service.service;
 
 import com.onetwo.postservice.application.port.in.command.DeletePostingCommand;
 import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
+import com.onetwo.postservice.application.port.in.command.UpdatePostingCommand;
 import com.onetwo.postservice.application.port.in.response.DeletePostingResponseDto;
 import com.onetwo.postservice.application.port.in.response.PostPostingResponseDto;
+import com.onetwo.postservice.application.port.in.response.UpdatePostingResponseDto;
 import com.onetwo.postservice.application.port.in.usecase.DeletePostingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.PostPostingUseCase;
+import com.onetwo.postservice.application.port.in.usecase.UpdatePostingUseCase;
 import com.onetwo.postservice.application.port.out.ReadPostingPort;
 import com.onetwo.postservice.application.port.out.RegisterPostingPort;
 import com.onetwo.postservice.application.port.out.UpdatePostingPort;
@@ -21,7 +24,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class PostingService implements PostPostingUseCase, DeletePostingUseCase {
+public class PostingService implements PostPostingUseCase, DeletePostingUseCase, UpdatePostingUseCase {
 
     private final RegisterPostingPort registerPostingPort;
     private final ReadPostingPort readPostingPort;
@@ -65,6 +68,28 @@ public class PostingService implements PostPostingUseCase, DeletePostingUseCase 
         updatePostingPort.updatePosting(posting);
 
         return postingUseCaseConverter.postingToDeleteResponseDto(posting);
+    }
+
+    /**
+     * Update posting use case,
+     * update posting data on persistence
+     *
+     * @param updatePostingCommand request update posting id and request user id and update data
+     * @return Boolean about update posting success
+     */
+    @Override
+    @Transactional
+    public UpdatePostingResponseDto updatePosting(UpdatePostingCommand updatePostingCommand) {
+        Posting posting = checkPostingExistAndGetPosting(updatePostingCommand.getPostingId());
+
+        if (!posting.isSameUserId(updatePostingCommand.getUserId()))
+            throw new BadRequestException("Poster does not match with request user");
+
+        posting.updatePosting(updatePostingCommand);
+
+        updatePostingPort.updatePosting(posting);
+
+        return postingUseCaseConverter.postingToUpdateResponseDto(true);
     }
 
     private Posting checkPostingExistAndGetPosting(Long postingId) {

@@ -25,39 +25,110 @@ endif::[]
 //표(table)의 설정 끝.
 
 [[Notice-Service-API]]
-== 1. Notice
+== 1. Posting
 
-=== Register Notice
+=== Post Posting
 
 http-request
 
-include::{snippets}/register-my-x/http-request.adoc[]
+include::{snippets}/post-posting/http-request.adoc[]
 
 request-headers
 
-include::{snippets}/register-my-x/request-headers.adoc[]
+include::{snippets}/post-posting/request-headers.adoc[]
 
 request-fields
 
-include::{snippets}/register-my-x/request-fields.adoc[]
+include::{snippets}/post-posting/request-fields.adoc[]
 
 request-body
 
-include::{snippets}/register-my-x/request-body.adoc[]
+include::{snippets}/post-posting/request-body.adoc[]
 
 curl-request
 
-include::{snippets}/register-my-x/curl-request.adoc[]
+include::{snippets}/post-posting/curl-request.adoc[]
 
 response-fields
 
-include::{snippets}/register-my-x/response-fields.adoc[]
+include::{snippets}/post-posting/response-fields.adoc[]
 
 response-body
 
-include::{snippets}/register-my-x/response-body.adoc[]
+include::{snippets}/post-posting/response-body.adoc[]
 
 http-response
 
-include::{snippets}/register-my-x/http-response.adoc[]
+include::{snippets}/post-posting/http-response.adoc[]
 
+=== Delete Posting
+
+path-parameters
+
+include::{snippets}/delete-posting/path-parameters.adoc[]
+
+http-request
+
+include::{snippets}/delete-posting/http-request.adoc[]
+
+request-headers
+
+include::{snippets}/delete-posting/request-headers.adoc[]
+
+request-body
+
+include::{snippets}/delete-posting/request-body.adoc[]
+
+curl-request
+
+include::{snippets}/delete-posting/curl-request.adoc[]
+
+response-fields
+
+include::{snippets}/delete-posting/response-fields.adoc[]
+
+response-body
+
+include::{snippets}/delete-posting/response-body.adoc[]
+
+http-response
+
+include::{snippets}/delete-posting/http-response.adoc[]
+
+=== Update Posting
+
+path-parameters
+
+include::{snippets}/update-posting/path-parameters.adoc[]
+
+http-request
+
+include::{snippets}/update-posting/http-request.adoc[]
+
+request-headers
+
+include::{snippets}/update-posting/request-headers.adoc[]
+
+request-fields
+
+include::{snippets}/update-posting/request-fields.adoc[]
+
+request-body
+
+include::{snippets}/update-posting/request-body.adoc[]
+
+curl-request
+
+include::{snippets}/update-posting/curl-request.adoc[]
+
+response-fields
+
+include::{snippets}/update-posting/response-fields.adoc[]
+
+response-body
+
+include::{snippets}/update-posting/response-body.adoc[]
+
+http-response
+
+include::{snippets}/update-posting/http-response.adoc[]

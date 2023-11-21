@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onetwo.postservice.adapter.in.web.config.TestConfig;
 import com.onetwo.postservice.adapter.in.web.posting.mapper.PostingDtoMapper;
 import com.onetwo.postservice.adapter.in.web.posting.request.PostPostingRequest;
+import com.onetwo.postservice.adapter.in.web.posting.request.UpdatePostingRequest;
 import com.onetwo.postservice.application.port.in.usecase.DeletePostingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.PostPostingUseCase;
+import com.onetwo.postservice.application.port.in.usecase.UpdatePostingUseCase;
 import com.onetwo.postservice.common.GlobalUrl;
 import com.onetwo.postservice.common.config.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -23,8 +25,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,8 +51,12 @@ class PostingControllerValidationTest {
     private DeletePostingUseCase deletePostingUseCase;
 
     @MockBean
+    private UpdatePostingUseCase updatePostingUseCase;
+
+    @MockBean
     private PostingDtoMapper postingDtoMapper;
 
+    private final Long postingId = 1L;
     private final String userId = "testUserId";
     private final String content = "content";
 
@@ -85,6 +90,42 @@ class PostingControllerValidationTest {
         ResultActions resultActions = mockMvc.perform(
                 delete(GlobalUrl.POST_ROOT + "/{posting-id}", postingId)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+        //then
+        resultActions.andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockUser(username = userId)
+    @DisplayName("[단위][Web Adapter] Posting 수정 posting id validation fail - 실패 테스트")
+    void updatePostingContentValidationFailTest() throws Exception {
+        //given
+        String postingId = "badPostingId";
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                put(GlobalUrl.POST_ROOT + "/{posting-id}", postingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+        //then
+        resultActions.andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @WithMockUser(username = userId)
+    @DisplayName("[단위][Web Adapter] Posting 수정 content validation fail - 실패 테스트")
+    void updatePostingContentValidationFailTest(String testContent) throws Exception {
+        //given
+        UpdatePostingRequest updatePostingRequest = new UpdatePostingRequest(testContent);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                put(GlobalUrl.POST_ROOT + "/{posting-id}", postingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatePostingRequest))
                         .accept(MediaType.APPLICATION_JSON));
         //then
         resultActions.andExpect(status().isBadRequest())

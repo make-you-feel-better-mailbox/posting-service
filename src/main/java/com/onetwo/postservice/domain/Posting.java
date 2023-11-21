@@ -2,6 +2,7 @@ package com.onetwo.postservice.domain;
 
 import com.onetwo.postservice.adapter.out.persistence.entity.PostingEntity;
 import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
+import com.onetwo.postservice.application.port.in.command.UpdatePostingCommand;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -63,5 +64,13 @@ public class Posting extends BaseDomain {
 
     public void deletePosting() {
         this.state = true;
+        setUpdatedAt(Instant.now());
+        setUpdateUser(this.userId);
+    }
+
+    public void updatePosting(UpdatePostingCommand updatePostingCommand) {
+        this.content = updatePostingCommand.getContent();
+        setUpdatedAt(Instant.now());
+        setUpdateUser(updatePostingCommand.getUserId());
     }
 }
