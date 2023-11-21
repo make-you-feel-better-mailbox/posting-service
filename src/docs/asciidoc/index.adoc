@@ -132,3 +132,33 @@ include::{snippets}/update-posting/response-body.adoc[]
 http-response
 
 include::{snippets}/update-posting/http-response.adoc[]
+
+=== Get Detail Posting
+
+path-parameters
+
+include::{snippets}/get-detail-posting/path-parameters.adoc[]
+
+http-request
+
+include::{snippets}/get-detail-posting/http-request.adoc[]
+
+request-headers
+
+include::{snippets}/get-detail-posting/request-headers.adoc[]
+
+curl-request
+
+include::{snippets}/get-detail-posting/curl-request.adoc[]
+
+response-fields
+
+include::{snippets}/get-detail-posting/response-fields.adoc[]
+
+response-body
+
+include::{snippets}/get-detail-posting/response-body.adoc[]
+
+http-response
+
+include::{snippets}/get-detail-posting/http-response.adoc[]

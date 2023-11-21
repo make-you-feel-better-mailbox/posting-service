@@ -1,13 +1,16 @@
 package com.onetwo.postservice.application.service.service;
 
 import com.onetwo.postservice.application.port.in.command.DeletePostingCommand;
+import com.onetwo.postservice.application.port.in.command.FindPostingDetailCommand;
 import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
 import com.onetwo.postservice.application.port.in.command.UpdatePostingCommand;
 import com.onetwo.postservice.application.port.in.response.DeletePostingResponseDto;
+import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
 import com.onetwo.postservice.application.port.in.response.PostPostingResponseDto;
 import com.onetwo.postservice.application.port.in.response.UpdatePostingResponseDto;
 import com.onetwo.postservice.application.port.in.usecase.DeletePostingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.PostPostingUseCase;
+import com.onetwo.postservice.application.port.in.usecase.ReadPosingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.UpdatePostingUseCase;
 import com.onetwo.postservice.application.port.out.ReadPostingPort;
 import com.onetwo.postservice.application.port.out.RegisterPostingPort;
@@ -24,7 +27,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class PostingService implements PostPostingUseCase, DeletePostingUseCase, UpdatePostingUseCase {
+public class PostingService implements PostPostingUseCase, DeletePostingUseCase, UpdatePostingUseCase, ReadPosingUseCase {
 
     private final RegisterPostingPort registerPostingPort;
     private final ReadPostingPort readPostingPort;
@@ -90,6 +93,21 @@ public class PostingService implements PostPostingUseCase, DeletePostingUseCase,
         updatePostingPort.updatePosting(posting);
 
         return postingUseCaseConverter.postingToUpdateResponseDto(true);
+    }
+
+    /**
+     * Get Detail about posting use case,
+     * Get detail data about posting if exist
+     *
+     * @param findPostingDetailCommand Request posting id
+     * @return Detail data about posting
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public FindPostingDetailResponseDto findPostingDetail(FindPostingDetailCommand findPostingDetailCommand) {
+        Posting posting = checkPostingExistAndGetPosting(findPostingDetailCommand.getPostingId());
+
+        return postingUseCaseConverter.postingToDetailResponse(posting);
     }
 
     private Posting checkPostingExistAndGetPosting(Long postingId) {

@@ -7,6 +7,7 @@ import com.onetwo.postservice.adapter.in.web.posting.request.PostPostingRequest;
 import com.onetwo.postservice.adapter.in.web.posting.request.UpdatePostingRequest;
 import com.onetwo.postservice.application.port.in.usecase.DeletePostingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.PostPostingUseCase;
+import com.onetwo.postservice.application.port.in.usecase.ReadPosingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.UpdatePostingUseCase;
 import com.onetwo.postservice.common.GlobalUrl;
 import com.onetwo.postservice.common.config.SecurityConfig;
@@ -54,6 +55,9 @@ class PostingControllerValidationTest {
     private UpdatePostingUseCase updatePostingUseCase;
 
     @MockBean
+    private ReadPosingUseCase readPosingUseCase;
+
+    @MockBean
     private PostingDtoMapper postingDtoMapper;
 
     private final Long postingId = 1L;
@@ -88,7 +92,7 @@ class PostingControllerValidationTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(
-                delete(GlobalUrl.POST_ROOT + "/{posting-id}", postingId)
+                delete(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
         //then
@@ -105,7 +109,7 @@ class PostingControllerValidationTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(
-                put(GlobalUrl.POST_ROOT + "/{posting-id}", postingId)
+                put(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
         //then
@@ -123,9 +127,26 @@ class PostingControllerValidationTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(
-                put(GlobalUrl.POST_ROOT + "/{posting-id}", postingId)
+                put(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatePostingRequest))
+                        .accept(MediaType.APPLICATION_JSON));
+        //then
+        resultActions.andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @WithMockUser(username = userId)
+    @DisplayName("[단위][Web Adapter] Posting 상세조회 posting id validation fail - 실패 테스트")
+    void getDetailPostingContentValidationFailTest() throws Exception {
+        //given
+        String postingId = "badPostingId";
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                get(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingId)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
         //then
         resultActions.andExpect(status().isBadRequest())

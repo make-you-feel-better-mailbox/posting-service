@@ -4,11 +4,14 @@ import com.onetwo.postservice.adapter.in.web.posting.request.PostPostingRequest;
 import com.onetwo.postservice.adapter.in.web.posting.request.UpdatePostingRequest;
 import com.onetwo.postservice.adapter.in.web.posting.response.DeletePostingResponse;
 import com.onetwo.postservice.adapter.in.web.posting.response.PostPostingResponse;
+import com.onetwo.postservice.adapter.in.web.posting.response.PostingDetailResponse;
 import com.onetwo.postservice.adapter.in.web.posting.response.UpdatePostingResponse;
 import com.onetwo.postservice.application.port.in.command.DeletePostingCommand;
+import com.onetwo.postservice.application.port.in.command.FindPostingDetailCommand;
 import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
 import com.onetwo.postservice.application.port.in.command.UpdatePostingCommand;
 import com.onetwo.postservice.application.port.in.response.DeletePostingResponseDto;
+import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
 import com.onetwo.postservice.application.port.in.response.PostPostingResponseDto;
 import com.onetwo.postservice.application.port.in.response.UpdatePostingResponseDto;
 import org.springframework.stereotype.Component;
@@ -43,5 +46,15 @@ public class PostingDtoMapperImpl implements PostingDtoMapper {
     @Override
     public UpdatePostingResponse dtoToUpdateResponse(UpdatePostingResponseDto updatePostingResponseDto) {
         return new UpdatePostingResponse(updatePostingResponseDto.isUpdateSuccess());
+    }
+
+    @Override
+    public FindPostingDetailCommand findRequestToCommand(Long postingId) {
+        return new FindPostingDetailCommand(postingId);
+    }
+
+    @Override
+    public PostingDetailResponse dtoToDetailResponse(FindPostingDetailResponseDto findPostingDetailsResponseDto) {
+        return new PostingDetailResponse(findPostingDetailsResponseDto.postingId(), findPostingDetailsResponseDto.userId(), findPostingDetailsResponseDto.postedDate());
     }
 }

@@ -158,4 +158,40 @@ class PostingControllerBootTest {
                         )
                 );
     }
+
+
+    @Test
+    @Transactional
+    @DisplayName("[통합][Web Adapter] Posting 상세 조회 - 성공 테스트")
+    void getDetailPostingSuccessTest() throws Exception {
+        //given
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingResponseDto postPostingResponseDto = postPostingUseCase.postPosting(postPostingCommand);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                get(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postPostingResponseDto.postingId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .headers(testHeader.getRequestHeaderWithMockAccessKey(userId))
+                        .accept(MediaType.APPLICATION_JSON));
+        //then
+        resultActions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-detail-posting",
+                                requestHeaders(
+                                        headerWithName(GlobalStatus.ACCESS_ID).description("서버 Access id"),
+                                        headerWithName(GlobalStatus.ACCESS_KEY).description("서버 Access key"),
+                                        headerWithName(GlobalStatus.ACCESS_TOKEN).description("유저의 access-token")
+                                ),
+                                pathParameters(
+                                        parameterWithName("posting-id").description("조회할 posting id")
+                                ),
+                                responseFields(
+                                        fieldWithPath("postingId").type(JsonFieldType.NUMBER).description("포스팅 id"),
+                                        fieldWithPath("userId").type(JsonFieldType.STRING).description("등록 유저"),
+                                        fieldWithPath("postedDate").type(JsonFieldType.STRING).description("등록일자")
+                                )
+                        )
+                );
+    }
 }

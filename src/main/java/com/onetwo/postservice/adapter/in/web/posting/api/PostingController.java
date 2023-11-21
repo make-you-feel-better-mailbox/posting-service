@@ -5,15 +5,19 @@ import com.onetwo.postservice.adapter.in.web.posting.request.PostPostingRequest;
 import com.onetwo.postservice.adapter.in.web.posting.request.UpdatePostingRequest;
 import com.onetwo.postservice.adapter.in.web.posting.response.DeletePostingResponse;
 import com.onetwo.postservice.adapter.in.web.posting.response.PostPostingResponse;
+import com.onetwo.postservice.adapter.in.web.posting.response.PostingDetailResponse;
 import com.onetwo.postservice.adapter.in.web.posting.response.UpdatePostingResponse;
 import com.onetwo.postservice.application.port.in.command.DeletePostingCommand;
+import com.onetwo.postservice.application.port.in.command.FindPostingDetailCommand;
 import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
 import com.onetwo.postservice.application.port.in.command.UpdatePostingCommand;
 import com.onetwo.postservice.application.port.in.response.DeletePostingResponseDto;
+import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
 import com.onetwo.postservice.application.port.in.response.PostPostingResponseDto;
 import com.onetwo.postservice.application.port.in.response.UpdatePostingResponseDto;
 import com.onetwo.postservice.application.port.in.usecase.DeletePostingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.PostPostingUseCase;
+import com.onetwo.postservice.application.port.in.usecase.ReadPosingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.UpdatePostingUseCase;
 import com.onetwo.postservice.common.GlobalUrl;
 import jakarta.validation.Valid;
@@ -30,6 +34,7 @@ public class PostingController {
     private final PostPostingUseCase postPostingUseCase;
     private final DeletePostingUseCase deletePostingUseCase;
     private final UpdatePostingUseCase updatePostingUseCase;
+    private final ReadPosingUseCase readPosingUseCase;
     private final PostingDtoMapper postingDtoMapper;
 
     /**
@@ -53,8 +58,8 @@ public class PostingController {
      * @param userId    user authentication id
      * @return Boolean about delete posting success
      */
-    @DeleteMapping(GlobalUrl.POST_ROOT + "/{posting-id}")
-    public ResponseEntity<DeletePostingResponse> deletePosting(@PathVariable("posting-id") Long postingId, @AuthenticationPrincipal String userId) {
+    @DeleteMapping(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE)
+    public ResponseEntity<DeletePostingResponse> deletePosting(@PathVariable(GlobalUrl.PATH_VARIABLE_POSTING_ID) Long postingId, @AuthenticationPrincipal String userId) {
         DeletePostingCommand deletePostingCommand = postingDtoMapper.deleteRequestToCommand(postingId, userId);
         DeletePostingResponseDto deletePostingResponseDto = deletePostingUseCase.deletePosting(deletePostingCommand);
         return ResponseEntity.ok().body(postingDtoMapper.dtoToDeleteResponse(deletePostingResponseDto));
@@ -68,12 +73,25 @@ public class PostingController {
      * @param userId               user authentication id
      * @return Boolean about update posting success
      */
-    @PutMapping(GlobalUrl.POST_ROOT + "/{posting-id}")
-    public ResponseEntity<UpdatePostingResponse> updatePosting(@PathVariable("posting-id") Long postingId,
+    @PutMapping(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE)
+    public ResponseEntity<UpdatePostingResponse> updatePosting(@PathVariable(GlobalUrl.PATH_VARIABLE_POSTING_ID) Long postingId,
                                                                @RequestBody @Valid UpdatePostingRequest updatePostingRequest,
                                                                @AuthenticationPrincipal String userId) {
         UpdatePostingCommand updatePostingCommand = postingDtoMapper.updateRequestToCommand(postingId, userId, updatePostingRequest);
         UpdatePostingResponseDto updatePostingResponseDto = updatePostingUseCase.updatePosting(updatePostingCommand);
         return ResponseEntity.ok().body(postingDtoMapper.dtoToUpdateResponse(updatePostingResponseDto));
+    }
+
+    /**
+     * Get Detail about posting inbound adapter
+     *
+     * @param postingId Request posting id
+     * @return Detail data about posting
+     */
+    @GetMapping(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE)
+    public ResponseEntity<PostingDetailResponse> findPostingDetail(@PathVariable(GlobalUrl.PATH_VARIABLE_POSTING_ID) Long postingId) {
+        FindPostingDetailCommand findPostingDetailCommand = postingDtoMapper.findRequestToCommand(postingId);
+        FindPostingDetailResponseDto findPostingDetailsResponseDto = readPosingUseCase.findPostingDetail(findPostingDetailCommand);
+        return ResponseEntity.ok().body(postingDtoMapper.dtoToDetailResponse(findPostingDetailsResponseDto));
     }
 }
