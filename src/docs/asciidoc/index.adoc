@@ -165,36 +165,32 @@ include::{snippets}/get-detail-posting/http-response.adoc[]
 
 == 2. Get Filtered Posting
 
-=== Filtering Posting by User Id
-
-path-parameters
-
-include::{snippets}/filtering-posting-by-user-id/path-parameters.adoc[]
+=== Filtering Posting
 
 query-parameters
 
-include::{snippets}/filtering-posting-by-user-id/query-parameters.adoc[]
+include::{snippets}/filtering-posting/query-parameters.adoc[]
 
 http-request
 
-include::{snippets}/filtering-posting-by-user-id/http-request.adoc[]
+include::{snippets}/filtering-posting/http-request.adoc[]
 
 request-headers
 
-include::{snippets}/filtering-posting-by-user-id/request-headers.adoc[]
+include::{snippets}/filtering-posting/request-headers.adoc[]
 
 curl-request
 
-include::{snippets}/filtering-posting-by-user-id/curl-request.adoc[]
+include::{snippets}/filtering-posting/curl-request.adoc[]
 
 response-fields
 
-include::{snippets}/filtering-posting-by-user-id/response-fields.adoc[]
+include::{snippets}/filtering-posting/response-fields.adoc[]
 
 response-body
 
-include::{snippets}/filtering-posting-by-user-id/response-body.adoc[]
+include::{snippets}/filtering-posting/response-body.adoc[]
 
 http-response
 
-include::{snippets}/filtering-posting-by-user-id/http-response.adoc[]
+include::{snippets}/filtering-posting/http-response.adoc[]

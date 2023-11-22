@@ -68,7 +68,7 @@ public class SecurityConfig {
     private MvcRequestMatcher[] createMvcRequestMatcherForWhitelist(MvcRequestMatcher.Builder mvc) {
         List<MvcRequestMatcher> mvcRequestMatcherList = Stream.of(WHITE_LIST).map(mvc::pattern).collect(Collectors.toList());
 
-        mvcRequestMatcherList.add(mvc.pattern(HttpMethod.GET, GlobalUrl.POSTING_FILTER + GlobalUrl.UNDER_ROUTE));
+        mvcRequestMatcherList.add(mvc.pattern(HttpMethod.GET, GlobalUrl.POSTING_FILTER));
 
         return mvcRequestMatcherList.toArray(MvcRequestMatcher[]::new);
     }

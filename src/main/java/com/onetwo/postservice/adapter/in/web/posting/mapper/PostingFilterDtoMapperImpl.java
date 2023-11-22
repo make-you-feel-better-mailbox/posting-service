@@ -1,8 +1,8 @@
 package com.onetwo.postservice.adapter.in.web.posting.mapper;
 
-import com.onetwo.postservice.adapter.in.web.posting.request.PageRequestDto;
+import com.onetwo.postservice.adapter.in.web.posting.request.FilterSliceRequest;
 import com.onetwo.postservice.adapter.in.web.posting.response.FilteredPostingResponse;
-import com.onetwo.postservice.application.port.in.command.PostingFilterByUserCommand;
+import com.onetwo.postservice.application.port.in.command.PostingFilterCommand;
 import com.onetwo.postservice.application.port.in.response.FilteredPostingResponseDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,12 +15,17 @@ import java.util.List;
 @Component
 public class PostingFilterDtoMapperImpl implements PostingFilterDtoMapper {
     @Override
-    public PostingFilterByUserCommand filterByUserToCommand(String userId, PageRequestDto pageRequestDto) {
+    public PostingFilterCommand filterRequestToCommand(FilterSliceRequest filterSliceRequest) {
         Pageable pageable = PageRequest.of(
-                pageRequestDto.pageNumber() == null ? 0 : pageRequestDto.pageNumber(),
-                pageRequestDto.pageSize() == null ? 20 : pageRequestDto.pageSize()
+                filterSliceRequest.pageNumber() == null ? 0 : filterSliceRequest.pageNumber(),
+                filterSliceRequest.pageSize() == null ? 20 : filterSliceRequest.pageSize()
         );
-        return new PostingFilterByUserCommand(userId, pageable);
+        return new PostingFilterCommand(
+                filterSliceRequest.userId(),
+                filterSliceRequest.content(),
+                filterSliceRequest.filterStartDate(),
+                filterSliceRequest.filterEndDate(),
+                pageable);
     }
 
     @Override

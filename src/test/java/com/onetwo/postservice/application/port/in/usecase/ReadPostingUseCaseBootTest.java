@@ -2,7 +2,7 @@ package com.onetwo.postservice.application.port.in.usecase;
 
 import com.onetwo.postservice.application.port.in.command.FindPostingDetailCommand;
 import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
-import com.onetwo.postservice.application.port.in.command.PostingFilterByUserCommand;
+import com.onetwo.postservice.application.port.in.command.PostingFilterCommand;
 import com.onetwo.postservice.application.port.in.response.FilteredPostingResponseDto;
 import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
 import com.onetwo.postservice.application.port.out.RegisterPostingPort;
@@ -18,6 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+
 @SpringBootTest
 @Transactional
 class ReadPostingUseCaseBootTest {
@@ -32,6 +34,9 @@ class ReadPostingUseCaseBootTest {
     private final String userId = "testUserId";
     private final String content = "content";
     private final PageRequest pageRequest = PageRequest.of(0, 20);
+    private final Instant filterStartDate = Instant.parse("2000-01-01T00:00:00Z");
+    private final Instant filterEndDate = Instant.parse("4000-01-01T00:00:00Z");
+
 
     @Test
     @DisplayName("[통합][Use Case] Posting 상세 조회 - 성공 테스트")
@@ -79,10 +84,10 @@ class ReadPostingUseCaseBootTest {
     }
 
     @Test
-    @DisplayName("[통합][Use Case] Posting Filter by user 조회 성공 - 성공 테스트")
+    @DisplayName("[통합][Use Case] Posting Filter 조회 성공 - 성공 테스트")
     void getFilteredPostingByUserUseCaseSuccessTest() {
         //given
-        PostingFilterByUserCommand postingFilterByUserCommand = new PostingFilterByUserCommand(userId, pageRequest);
+        PostingFilterCommand postingFilterCommand = new PostingFilterCommand(userId, content, filterStartDate, filterEndDate, pageRequest);
 
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
@@ -90,7 +95,7 @@ class ReadPostingUseCaseBootTest {
         registerPostingPort.registerPosting(posting);
 
         //when
-        Slice<FilteredPostingResponseDto> result = readPostingUseCase.filterPostingByUser(postingFilterByUserCommand);
+        Slice<FilteredPostingResponseDto> result = readPostingUseCase.filterPosting(postingFilterCommand);
 
         //then
         Assertions.assertNotNull(result);
@@ -101,10 +106,10 @@ class ReadPostingUseCaseBootTest {
     @DisplayName("[통합][Use Case] Posting Filter by user empty list 조회 성공 - 성공 테스트")
     void getFilteredPostingByUserUseCaseEmptyListSuccessTest() {
         //given
-        PostingFilterByUserCommand postingFilterByUserCommand = new PostingFilterByUserCommand(userId, pageRequest);
+        PostingFilterCommand postingFilterCommand = new PostingFilterCommand(userId, content, filterStartDate, filterEndDate, pageRequest);
 
         //when
-        Slice<FilteredPostingResponseDto> result = readPostingUseCase.filterPostingByUser(postingFilterByUserCommand);
+        Slice<FilteredPostingResponseDto> result = readPostingUseCase.filterPosting(postingFilterCommand);
 
         //then
         Assertions.assertNotNull(result);

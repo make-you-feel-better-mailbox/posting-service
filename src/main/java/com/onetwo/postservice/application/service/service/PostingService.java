@@ -118,24 +118,24 @@ public class PostingService implements PostPostingUseCase, DeletePostingUseCase,
     }
 
     /**
-     * Get Filtered Posting by user id use case,
+     * Get Filtered Posting use case,
      * Get Filtered slice posting data
      *
-     * @param postingFilterByUserCommand filter condition user id and pageable
+     * @param postingFilterCommand filter condition and pageable
      * @return content and slice data
      */
     @Override
     @Transactional(readOnly = true)
-    public Slice<FilteredPostingResponseDto> filterPostingByUser(PostingFilterByUserCommand postingFilterByUserCommand) {
-        List<Posting> postingList = readPostingPort.findByUserId(postingFilterByUserCommand.getUserId(), postingFilterByUserCommand.getPageable());
+    public Slice<FilteredPostingResponseDto> filterPosting(PostingFilterCommand postingFilterCommand) {
+        List<Posting> postingList = readPostingPort.filterPosting(postingFilterCommand);
 
-        boolean hasNext = postingList.size() > postingFilterByUserCommand.getPageable().getPageSize();
+        boolean hasNext = postingList.size() > postingFilterCommand.getPageable().getPageSize();
 
         if (hasNext) postingList.remove(postingList.size() - 1);
 
         List<FilteredPostingResponseDto> filteredPostingResponseDtoList = postingList.stream()
                 .map(postingUseCaseConverter::postingToFilteredResponse).toList();
 
-        return new SliceImpl<>(filteredPostingResponseDtoList, postingFilterByUserCommand.getPageable(), hasNext);
+        return new SliceImpl<>(filteredPostingResponseDtoList, postingFilterCommand.getPageable(), hasNext);
     }
 }

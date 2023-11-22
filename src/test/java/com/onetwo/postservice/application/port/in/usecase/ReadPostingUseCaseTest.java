@@ -2,7 +2,7 @@ package com.onetwo.postservice.application.port.in.usecase;
 
 import com.onetwo.postservice.application.port.in.command.FindPostingDetailCommand;
 import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
-import com.onetwo.postservice.application.port.in.command.PostingFilterByUserCommand;
+import com.onetwo.postservice.application.port.in.command.PostingFilterCommand;
 import com.onetwo.postservice.application.port.in.response.FilteredPostingResponseDto;
 import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
 import com.onetwo.postservice.application.port.out.ReadPostingPort;
@@ -19,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import java.time.Instant;
@@ -27,7 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +47,8 @@ class ReadPostingUseCaseTest {
     private final String content = "content";
     private final Instant postedDate = Instant.now();
     private final PageRequest pageRequest = PageRequest.of(0, 20);
+    private final Instant filterStartDate = Instant.parse("2000-01-01T00:00:00Z");
+    private final Instant filterEndDate = Instant.parse("4000-01-01T00:00:00Z");
 
     @Test
     @DisplayName("[단위][Use Case] Posting 상세 조회 - 성공 테스트")
@@ -101,7 +103,7 @@ class ReadPostingUseCaseTest {
     @DisplayName("[단위][Use Case] Posting Filter by user 조회 성공 - 성공 테스트")
     void getFilteredPostingByUserUseCaseSuccessTest() {
         //given
-        PostingFilterByUserCommand postingFilterByUserCommand = new PostingFilterByUserCommand(userId, pageRequest);
+        PostingFilterCommand postingFilterCommand = new PostingFilterCommand(userId, content, filterStartDate, filterEndDate, pageRequest);
 
         FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(postingId, userId, Instant.now());
 
@@ -111,10 +113,10 @@ class ReadPostingUseCaseTest {
         List<Posting> postingList = new ArrayList<>();
         postingList.add(posting);
 
-        given(readPostingPort.findByUserId(anyString(), any(Pageable.class))).willReturn(postingList);
+        given(readPostingPort.filterPosting(any(PostingFilterCommand.class))).willReturn(postingList);
         given(postingUseCaseConverter.postingToFilteredResponse(any(Posting.class))).willReturn(testFilteredPosting);
         //when
-        Slice<FilteredPostingResponseDto> result = readPostingUseCase.filterPostingByUser(postingFilterByUserCommand);
+        Slice<FilteredPostingResponseDto> result = readPostingUseCase.filterPosting(postingFilterCommand);
 
         //then
         Assertions.assertNotNull(result);
@@ -125,13 +127,13 @@ class ReadPostingUseCaseTest {
     @DisplayName("[단위][Use Case] Posting Filter by user empty list 조회 성공 - 성공 테스트")
     void getFilteredPostingByUserUseCaseEmptyListSuccessTest() {
         //given
-        PostingFilterByUserCommand postingFilterByUserCommand = new PostingFilterByUserCommand(userId, pageRequest);
+        PostingFilterCommand postingFilterCommand = new PostingFilterCommand(userId, content, filterStartDate, filterEndDate, pageRequest);
 
         List<Posting> postingList = new ArrayList<>();
 
-        given(readPostingPort.findByUserId(anyString(), any(Pageable.class))).willReturn(postingList);
+        given(readPostingPort.filterPosting(any(PostingFilterCommand.class))).willReturn(postingList);
         //when
-        Slice<FilteredPostingResponseDto> result = readPostingUseCase.filterPostingByUser(postingFilterByUserCommand);
+        Slice<FilteredPostingResponseDto> result = readPostingUseCase.filterPosting(postingFilterCommand);
 
         //then
         Assertions.assertNotNull(result);

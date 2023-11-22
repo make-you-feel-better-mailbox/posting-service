@@ -2,12 +2,12 @@ package com.onetwo.postservice.application.service.adapter;
 
 import com.onetwo.postservice.adapter.out.persistence.entity.PostingEntity;
 import com.onetwo.postservice.adapter.out.persistence.repository.posting.PostingRepository;
+import com.onetwo.postservice.application.port.in.command.PostingFilterCommand;
 import com.onetwo.postservice.application.port.out.ReadPostingPort;
 import com.onetwo.postservice.application.port.out.RegisterPostingPort;
 import com.onetwo.postservice.application.port.out.UpdatePostingPort;
 import com.onetwo.postservice.domain.Posting;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -43,8 +43,8 @@ public class PostingPersistenceAdapter implements RegisterPostingPort, ReadPosti
     }
 
     @Override
-    public List<Posting> findByUserId(String userId, Pageable pageable) {
-        List<PostingEntity> postingEntityList = postingRepository.sliceByUserId(userId, pageable);
+    public List<Posting> filterPosting(PostingFilterCommand postingFilterCommand) {
+        List<PostingEntity> postingEntityList = postingRepository.sliceByCommand(postingFilterCommand);
 
         return postingEntityList.stream().map(Posting::entityToDomain).collect(Collectors.toList());
     }

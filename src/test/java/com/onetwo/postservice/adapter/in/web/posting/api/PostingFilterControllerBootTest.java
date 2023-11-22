@@ -21,13 +21,16 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.Instant;
+
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,14 +54,20 @@ class PostingFilterControllerBootTest {
 
     private final String userId = "testUserId";
     private final String content = "content";
+    private final String contentPath = "content";
     private final PageRequest pageRequest = PageRequest.of(0, 20);
     private final String pageNumber = "pageNumber";
     private final String pageSize = "pageSize";
+    private final String userIdQueryStringPath = "userId";
+    private final Instant filterStartDate = Instant.parse("2000-01-01T00:00:00Z");
+    private final Instant filterEndDate = Instant.parse("4000-01-01T00:00:00Z");
+    private final String filterStartDatePath = "filterStartDate";
+    private final String filterEndDatePath = "filterEndDate";
 
     @Test
     @Transactional
-    @DisplayName("[통합][Web Adapter] Posting Filter by user 조회 성공 - 성공 테스트")
-    void getFilteredPostingByUserSuccessTest() throws Exception {
+    @DisplayName("[통합][Web Adapter] Posting Filter 조회 성공 - 성공 테스트")
+    void getFilteredPostingSuccessTest() throws Exception {
         //given
         for (int i = 1; i <= pageRequest.getPageSize(); i++) {
             PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i);
@@ -68,29 +77,34 @@ class PostingFilterControllerBootTest {
         String queryString = UriComponentsBuilder.newInstance()
                 .queryParam(pageNumber, pageRequest.getPageNumber())
                 .queryParam(pageSize, pageRequest.getPageSize())
+                .queryParam(userIdQueryStringPath, userId)
+                .queryParam(filterStartDatePath, filterStartDate)
+                .queryParam(filterEndDatePath, filterEndDate)
+                .queryParam(contentPath, content)
                 .build()
                 .encode()
                 .toUriString();
         //when
         ResultActions resultActions = mockMvc.perform(
-                get(GlobalUrl.POSTING_FILTER + GlobalUrl.PATH_VARIABLE_USER_ID_WITH_BRACE + queryString, userId)
+                get(GlobalUrl.POSTING_FILTER + queryString)
                         .contentType(MediaType.APPLICATION_JSON)
                         .headers(testHeader.getRequestHeader())
                         .accept(MediaType.APPLICATION_JSON));
         //then
         resultActions.andExpect(status().isOk())
                 .andDo(print())
-                .andDo(document("filtering-posting-by-user-id",
+                .andDo(document("filtering-posting",
                                 requestHeaders(
                                         headerWithName(GlobalStatus.ACCESS_ID).description("서버 Access id"),
                                         headerWithName(GlobalStatus.ACCESS_KEY).description("서버 Access key")
                                 ),
-                                pathParameters(
-                                        parameterWithName(GlobalUrl.PATH_VARIABLE_USER_ID).description("조회할 posting의 user id")
-                                ),
                                 queryParameters(
                                         parameterWithName(pageNumber).description("조회할 posting slice 페이지 번호"),
-                                        parameterWithName(pageSize).description("조회할 posting slice size")
+                                        parameterWithName(pageSize).description("조회할 posting slice size"),
+                                        parameterWithName(userIdQueryStringPath).description("조회할 posting의 user id"),
+                                        parameterWithName(filterStartDatePath).description("조회할 posting의 시작 날짜"),
+                                        parameterWithName(filterEndDatePath).description("조회할 posting의 끝 날짜"),
+                                        parameterWithName(contentPath).description("조회할 본문")
                                 ),
                                 responseFields(
                                         fieldWithPath("content[]").type(JsonFieldType.ARRAY).description("Posting List"),
@@ -124,8 +138,8 @@ class PostingFilterControllerBootTest {
 
     @Test
     @Transactional
-    @DisplayName("[통합][Web Adapter] Posting Filter by user page number validation - 성공 테스트")
-    void getFilteredPostingByUserWithOutPageNumberSuccessTest() throws Exception {
+    @DisplayName("[통합][Web Adapter] Posting Filter page number validation - 성공 테스트")
+    void getFilteredPostingWithOutPageNumberSuccessTest() throws Exception {
         //given
         for (int i = 1; i <= pageRequest.getPageSize(); i++) {
             PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i);
@@ -139,7 +153,7 @@ class PostingFilterControllerBootTest {
                 .toUriString();
         //when
         ResultActions resultActions = mockMvc.perform(
-                get(GlobalUrl.POSTING_FILTER + GlobalUrl.PATH_VARIABLE_USER_ID_WITH_BRACE + queryString, userId)
+                get(GlobalUrl.POSTING_FILTER + queryString)
                         .contentType(MediaType.APPLICATION_JSON)
                         .headers(testHeader.getRequestHeader())
                         .accept(MediaType.APPLICATION_JSON));
@@ -150,8 +164,8 @@ class PostingFilterControllerBootTest {
 
     @Test
     @Transactional
-    @DisplayName("[통합][Web Adapter] Posting Filter by user page size validation - 성공 테스트")
-    void getFilteredPostingByUserWithOutPageSizeSuccessTest() throws Exception {
+    @DisplayName("[통합][Web Adapter] Posting Filter page size validation - 성공 테스트")
+    void getFilteredPostingWithOutPageSizeSuccessTest() throws Exception {
         //given
         for (int i = 1; i <= pageRequest.getPageSize(); i++) {
             PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i);
@@ -165,7 +179,28 @@ class PostingFilterControllerBootTest {
                 .toUriString();
         //when
         ResultActions resultActions = mockMvc.perform(
-                get(GlobalUrl.POSTING_FILTER + GlobalUrl.PATH_VARIABLE_USER_ID_WITH_BRACE + queryString, userId)
+                get(GlobalUrl.POSTING_FILTER + queryString)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .headers(testHeader.getRequestHeader())
+                        .accept(MediaType.APPLICATION_JSON));
+        //then
+        resultActions.andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("[통합][Web Adapter] Posting Filter with nothing validation - 성공 테스트")
+    void getFilteredPostingRequestNothingSuccessTest() throws Exception {
+        //given
+        for (int i = 1; i <= pageRequest.getPageSize(); i++) {
+            PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i);
+            postPostingUseCase.postPosting(postPostingCommand);
+        }
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                get(GlobalUrl.POSTING_FILTER)
                         .contentType(MediaType.APPLICATION_JSON)
                         .headers(testHeader.getRequestHeader())
                         .accept(MediaType.APPLICATION_JSON));
