@@ -1,7 +1,7 @@
 package com.onetwo.postservice.common.jwt;
 
-import com.onetwo.myxservice.common.exceptions.TokenValidationException;
-import com.onetwo.myxservice.domain.RoleNames;
+import com.onetwo.postservice.common.exceptions.TokenValidationException;
+import com.onetwo.postservice.domain.RoleNames;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

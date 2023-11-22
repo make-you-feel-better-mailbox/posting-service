@@ -1,6 +1,6 @@
 package com.onetwo.postservice.common.jwt;
 
-import com.onetwo.myxservice.common.GlobalStatus;
+import com.onetwo.postservice.common.GlobalStatus;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
