@@ -7,9 +7,12 @@ import com.onetwo.postservice.application.port.out.RegisterPostingPort;
 import com.onetwo.postservice.application.port.out.UpdatePostingPort;
 import com.onetwo.postservice.domain.Posting;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -37,6 +40,13 @@ public class PostingPersistenceAdapter implements RegisterPostingPort, ReadPosti
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public List<Posting> findByUserId(String userId, Pageable pageable) {
+        List<PostingEntity> postingEntityList = postingRepository.sliceByUserId(userId, pageable);
+
+        return postingEntityList.stream().map(Posting::entityToDomain).collect(Collectors.toList());
     }
 
     @Override

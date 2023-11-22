@@ -1,7 +1,10 @@
 package com.onetwo.postservice.application.port.in.usecase;
 
 import com.onetwo.postservice.application.port.in.command.FindPostingDetailCommand;
+import com.onetwo.postservice.application.port.in.command.PostingFilterByUserCommand;
+import com.onetwo.postservice.application.port.in.response.FilteredPostingResponseDto;
 import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
+import org.springframework.data.domain.Slice;
 
 public interface ReadPosingUseCase {
 
@@ -13,4 +16,13 @@ public interface ReadPosingUseCase {
      * @return Detail data about posting
      */
     FindPostingDetailResponseDto findPostingDetail(FindPostingDetailCommand findPostingDetailCommand);
+
+    /**
+     * Get Filtered Posting by user id use case,
+     * Get Filtered slice posting data
+     *
+     * @param postingFilterByUserCommand filter condition user id and pageable
+     * @return content and slice data
+     */
+    Slice<FilteredPostingResponseDto> filterPostingByUser(PostingFilterByUserCommand postingFilterByUserCommand);
 }

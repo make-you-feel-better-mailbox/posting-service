@@ -24,12 +24,12 @@ class DeletePostingUseCaseBootTest {
     @Autowired
     private RegisterPostingPort registerPostingPort;
 
-    private final Long postingIdx = 1L;
+    private final Long postingId = 1L;
     private final String userId = "testUserId";
     private final String content = "content";
 
     @Test
-    @DisplayName("[단위][Use Case] Posting 삭제 - 성공 테스트")
+    @DisplayName("[통합][Use Case] Posting 삭제 - 성공 테스트")
     void deletePostingUseCaseSuccessTest() {
         //given
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
@@ -47,17 +47,17 @@ class DeletePostingUseCaseBootTest {
     }
 
     @Test
-    @DisplayName("[단위][Use Case] Posting 삭제 posting does not exist - 실패 테스트")
+    @DisplayName("[통합][Use Case] Posting 삭제 posting does not exist - 실패 테스트")
     void deletePostingUseCasePostingDoesNotExistFailTest() {
         //given
-        DeletePostingCommand deletePostingCommand = new DeletePostingCommand(postingIdx, userId);
+        DeletePostingCommand deletePostingCommand = new DeletePostingCommand(postingId, userId);
 
         //when then
         Assertions.assertThrows(NotFoundResourceException.class, () -> deletePostingUseCase.deletePosting(deletePostingCommand));
     }
 
     @Test
-    @DisplayName("[단위][Use Case] Posting 삭제 posting already deleted - 실패 테스트")
+    @DisplayName("[통합][Use Case] Posting 삭제 posting already deleted - 실패 테스트")
     void deletePostingUseCasePostingAlreadyDeletedFailTest() {
         //given
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);

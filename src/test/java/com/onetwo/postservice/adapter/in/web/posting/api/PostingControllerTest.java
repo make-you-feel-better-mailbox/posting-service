@@ -94,7 +94,7 @@ class PostingControllerTest {
         when(postingDtoMapper.dtoToPostResponse(any(PostPostingResponseDto.class))).thenReturn(postPostingResponse);
         //when
         ResultActions resultActions = mockMvc.perform(
-                post(GlobalUrl.POST_ROOT)
+                post(GlobalUrl.POSTING_ROOT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postPostingRequest))
                         .accept(MediaType.APPLICATION_JSON));
@@ -117,7 +117,7 @@ class PostingControllerTest {
         when(postingDtoMapper.dtoToDeleteResponse(any(DeletePostingResponseDto.class))).thenReturn(deletePostingResponse);
         //when
         ResultActions resultActions = mockMvc.perform(
-                delete(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingIdx)
+                delete(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingIdx)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
         //then
@@ -140,7 +140,7 @@ class PostingControllerTest {
         when(postingDtoMapper.dtoToUpdateResponse(any(UpdatePostingResponseDto.class))).thenReturn(updatePostingResponse);
         //when
         ResultActions resultActions = mockMvc.perform(
-                put(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingIdx)
+                put(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingIdx)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatePostingRequest))
                         .accept(MediaType.APPLICATION_JSON));
@@ -163,7 +163,7 @@ class PostingControllerTest {
         when(postingDtoMapper.dtoToDetailResponse(any(FindPostingDetailResponseDto.class))).thenReturn(postingDetailResponse);
         //when
         ResultActions resultActions = mockMvc.perform(
-                get(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingIdx)
+                get(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingIdx)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
         //then

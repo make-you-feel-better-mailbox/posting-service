@@ -1,5 +1,6 @@
 package com.onetwo.postservice.common.config;
 
+import com.onetwo.postservice.common.GlobalUrl;
 import com.onetwo.postservice.common.config.filter.FilterConfigure;
 import com.onetwo.postservice.common.jwt.JwtAccessDeniedHandler;
 import com.onetwo.postservice.common.jwt.JwtAuthenticationEntryPoint;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,6 +19,7 @@ import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Configuration
@@ -63,7 +66,9 @@ public class SecurityConfig {
     }
 
     private MvcRequestMatcher[] createMvcRequestMatcherForWhitelist(MvcRequestMatcher.Builder mvc) {
-        List<MvcRequestMatcher> mvcRequestMatcherList = Stream.of(WHITE_LIST).map(mvc::pattern).toList();
+        List<MvcRequestMatcher> mvcRequestMatcherList = Stream.of(WHITE_LIST).map(mvc::pattern).collect(Collectors.toList());
+
+        mvcRequestMatcherList.add(mvc.pattern(HttpMethod.GET, GlobalUrl.POSTING_FILTER + GlobalUrl.UNDER_ROUTE));
 
         return mvcRequestMatcherList.toArray(MvcRequestMatcher[]::new);
     }

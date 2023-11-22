@@ -1,13 +1,7 @@
 package com.onetwo.postservice.application.service.service;
 
-import com.onetwo.postservice.application.port.in.command.DeletePostingCommand;
-import com.onetwo.postservice.application.port.in.command.FindPostingDetailCommand;
-import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
-import com.onetwo.postservice.application.port.in.command.UpdatePostingCommand;
-import com.onetwo.postservice.application.port.in.response.DeletePostingResponseDto;
-import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
-import com.onetwo.postservice.application.port.in.response.PostPostingResponseDto;
-import com.onetwo.postservice.application.port.in.response.UpdatePostingResponseDto;
+import com.onetwo.postservice.application.port.in.command.*;
+import com.onetwo.postservice.application.port.in.response.*;
 import com.onetwo.postservice.application.port.in.usecase.DeletePostingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.PostPostingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.ReadPosingUseCase;
@@ -20,9 +14,12 @@ import com.onetwo.postservice.common.exceptions.BadRequestException;
 import com.onetwo.postservice.common.exceptions.NotFoundResourceException;
 import com.onetwo.postservice.domain.Posting;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -118,5 +115,27 @@ public class PostingService implements PostPostingUseCase, DeletePostingUseCase,
         if (optionalPosting.get().isDeleted()) throw new BadRequestException("Posting already deleted");
 
         return optionalPosting.get();
+    }
+
+    /**
+     * Get Filtered Posting by user id use case,
+     * Get Filtered slice posting data
+     *
+     * @param postingFilterByUserCommand filter condition user id and pageable
+     * @return content and slice data
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<FilteredPostingResponseDto> filterPostingByUser(PostingFilterByUserCommand postingFilterByUserCommand) {
+        List<Posting> postingList = readPostingPort.findByUserId(postingFilterByUserCommand.getUserId(), postingFilterByUserCommand.getPageable());
+
+        boolean hasNext = postingList.size() > postingFilterByUserCommand.getPageable().getPageSize();
+
+        if (hasNext) postingList.remove(postingList.size() - 1);
+
+        List<FilteredPostingResponseDto> filteredPostingResponseDtoList = postingList.stream()
+                .map(postingUseCaseConverter::postingToFilteredResponse).toList();
+
+        return new SliceImpl<>(filteredPostingResponseDtoList, postingFilterByUserCommand.getPageable(), hasNext);
     }
 }

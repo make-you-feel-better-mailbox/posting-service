@@ -29,7 +29,7 @@ class UpdatePostingUseCaseBootTest {
     private final String content = "content";
 
     @Test
-    @DisplayName("[단위][Use Case] Posting 수정 - 성공 테스트")
+    @DisplayName("[통합][Use Case] Posting 수정 - 성공 테스트")
     void updatePostingUseCaseSuccessTest() {
         //given
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
@@ -47,7 +47,7 @@ class UpdatePostingUseCaseBootTest {
     }
 
     @Test
-    @DisplayName("[단위][Use Case] Posting 수정 posting does not exist - 실패 테스트")
+    @DisplayName("[통합][Use Case] Posting 수정 posting does not exist - 실패 테스트")
     void updatePostingUseCasePostingDoesNotExistFailTest() {
         //given
         UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingIdx, userId, content);
@@ -57,7 +57,7 @@ class UpdatePostingUseCaseBootTest {
     }
 
     @Test
-    @DisplayName("[단위][Use Case] Posting 수정 posting already deleted - 실패 테스트")
+    @DisplayName("[통합][Use Case] Posting 수정 posting already deleted - 실패 테스트")
     void updatePostingUseCasePostingAlreadyDeletedFailTest() {
         //given
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);

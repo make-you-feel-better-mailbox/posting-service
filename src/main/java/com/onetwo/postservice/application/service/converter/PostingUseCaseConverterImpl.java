@@ -1,9 +1,6 @@
 package com.onetwo.postservice.application.service.converter;
 
-import com.onetwo.postservice.application.port.in.response.DeletePostingResponseDto;
-import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
-import com.onetwo.postservice.application.port.in.response.PostPostingResponseDto;
-import com.onetwo.postservice.application.port.in.response.UpdatePostingResponseDto;
+import com.onetwo.postservice.application.port.in.response.*;
 import com.onetwo.postservice.domain.Posting;
 import org.springframework.stereotype.Component;
 
@@ -27,5 +24,10 @@ public class PostingUseCaseConverterImpl implements PostingUseCaseConverter {
     @Override
     public FindPostingDetailResponseDto postingToDetailResponse(Posting posting) {
         return new FindPostingDetailResponseDto(posting.getId(), posting.getUserId(), posting.getCreatedAt());
+    }
+
+    @Override
+    public FilteredPostingResponseDto postingToFilteredResponse(Posting posting) {
+        return new FilteredPostingResponseDto(posting.getId(), posting.getUserId(), posting.getCreatedAt());
     }
 }

@@ -44,7 +44,7 @@ public class PostingController {
      * @param userId             user authentication id
      * @return Boolean about post success and if success post, then return with saved posting's id
      */
-    @PostMapping(GlobalUrl.POST_ROOT)
+    @PostMapping(GlobalUrl.POSTING_ROOT)
     public ResponseEntity<PostPostingResponse> postPosting(@RequestBody @Valid PostPostingRequest postPostingRequest, @AuthenticationPrincipal String userId) {
         PostPostingCommand postPostingCommand = postingDtoMapper.postRequestToCommand(userId, postPostingRequest);
         PostPostingResponseDto postPostingResponseDto = postPostingUseCase.postPosting(postPostingCommand);
@@ -58,7 +58,7 @@ public class PostingController {
      * @param userId    user authentication id
      * @return Boolean about delete posting success
      */
-    @DeleteMapping(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE)
+    @DeleteMapping(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE)
     public ResponseEntity<DeletePostingResponse> deletePosting(@PathVariable(GlobalUrl.PATH_VARIABLE_POSTING_ID) Long postingId, @AuthenticationPrincipal String userId) {
         DeletePostingCommand deletePostingCommand = postingDtoMapper.deleteRequestToCommand(postingId, userId);
         DeletePostingResponseDto deletePostingResponseDto = deletePostingUseCase.deletePosting(deletePostingCommand);
@@ -73,7 +73,7 @@ public class PostingController {
      * @param userId               user authentication id
      * @return Boolean about update posting success
      */
-    @PutMapping(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE)
+    @PutMapping(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE)
     public ResponseEntity<UpdatePostingResponse> updatePosting(@PathVariable(GlobalUrl.PATH_VARIABLE_POSTING_ID) Long postingId,
                                                                @RequestBody @Valid UpdatePostingRequest updatePostingRequest,
                                                                @AuthenticationPrincipal String userId) {
@@ -88,7 +88,7 @@ public class PostingController {
      * @param postingId Request posting id
      * @return Detail data about posting
      */
-    @GetMapping(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE)
+    @GetMapping(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE)
     public ResponseEntity<PostingDetailResponse> findPostingDetail(@PathVariable(GlobalUrl.PATH_VARIABLE_POSTING_ID) Long postingId) {
         FindPostingDetailCommand findPostingDetailCommand = postingDtoMapper.findRequestToCommand(postingId);
         FindPostingDetailResponseDto findPostingDetailsResponseDto = readPosingUseCase.findPostingDetail(findPostingDetailCommand);
