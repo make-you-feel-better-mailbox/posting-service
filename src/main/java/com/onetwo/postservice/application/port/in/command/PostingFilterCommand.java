@@ -1,7 +1,6 @@
 package com.onetwo.postservice.application.port.in.command;
 
-import com.onetwo.postservice.application.port.SelfValidating;
-import jakarta.validation.constraints.NotNull;
+import com.onetwo.postservice.application.port.SliceRequest;
 import lombok.Getter;
 import org.springframework.data.domain.Pageable;
 
@@ -9,7 +8,7 @@ import java.time.Instant;
 
 
 @Getter
-public final class PostingFilterCommand extends SelfValidating<PostingFilterCommand> {
+public final class PostingFilterCommand extends SliceRequest<PostingFilterCommand> {
 
     private final String userId;
 
@@ -19,15 +18,12 @@ public final class PostingFilterCommand extends SelfValidating<PostingFilterComm
 
     private final Instant filterEndDate;
 
-    @NotNull
-    private final Pageable pageable;
-
     public PostingFilterCommand(String userId, String content, Instant filterStartDate, Instant filterEndDate, Pageable pageable) {
+        super(pageable);
         this.userId = userId;
         this.content = content;
         this.filterStartDate = filterStartDate;
         this.filterEndDate = filterEndDate;
-        this.pageable = pageable;
         this.validateSelf();
     }
 }
