@@ -105,7 +105,7 @@ class ReadPostingUseCaseTest {
         //given
         PostingFilterCommand postingFilterCommand = new PostingFilterCommand(userId, content, filterStartDate, filterEndDate, pageRequest);
 
-        FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(postingId, userId, Instant.now());
+        FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(postingId, userId, content, Instant.now());
 
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);

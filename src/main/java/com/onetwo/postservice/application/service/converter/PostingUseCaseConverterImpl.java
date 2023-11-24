@@ -28,6 +28,6 @@ public class PostingUseCaseConverterImpl implements PostingUseCaseConverter {
 
     @Override
     public FilteredPostingResponseDto postingToFilteredResponse(Posting posting) {
-        return new FilteredPostingResponseDto(posting.getId(), posting.getUserId(), posting.getCreatedAt());
+        return new FilteredPostingResponseDto(posting.getId(), posting.getUserId(), posting.getContent(), posting.getCreatedAt());
     }
 }

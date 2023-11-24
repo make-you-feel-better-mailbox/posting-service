@@ -110,6 +110,7 @@ class PostingFilterControllerBootTest {
                                         fieldWithPath("content[]").type(JsonFieldType.ARRAY).description("Posting List"),
                                         fieldWithPath("content[].postingId").type(JsonFieldType.NUMBER).description("Posting id"),
                                         fieldWithPath("content[].userId").type(JsonFieldType.STRING).description("Posting 작성자 user id"),
+                                        fieldWithPath("content[].content").type(JsonFieldType.STRING).description("Posting의 본문"),
                                         fieldWithPath("content[].postedDate").type(JsonFieldType.STRING).description("Posting 작성 일자"),
                                         fieldWithPath("pageable").type(JsonFieldType.OBJECT).description("pageable object"),
                                         fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER).description("조회 페이지 번호"),

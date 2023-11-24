@@ -78,14 +78,14 @@ class PostingFilterControllerTest {
         List<FilteredPostingResponseDto> filteredPostingResponseDtoList = new ArrayList<>();
 
         for (int i = 1; i <= pageRequest.getPageSize(); i++) {
-            FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(i, userId, Instant.now());
+            FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(i, userId, content + i, Instant.now());
             filteredPostingResponseDtoList.add(testFilteredPosting);
         }
 
         Slice<FilteredPostingResponseDto> filteredPostingResponseDtoSlice = new SliceImpl<>(filteredPostingResponseDtoList, pageRequest, true);
 
         List<FilteredPostingResponse> filteredPostingResponseList = filteredPostingResponseDtoList.stream()
-                .map(responseDto -> new FilteredPostingResponse(responseDto.postingId(), responseDto.userId(), responseDto.postedDate())).toList();
+                .map(responseDto -> new FilteredPostingResponse(responseDto.postingId(), responseDto.userId(), responseDto.content(), responseDto.postedDate())).toList();
 
         Slice<FilteredPostingResponse> filteredPostingResponseSlice = new SliceImpl<>(filteredPostingResponseList, pageRequest, true);
 
