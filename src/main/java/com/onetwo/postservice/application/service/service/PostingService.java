@@ -112,9 +112,11 @@ public class PostingService implements PostPostingUseCase, DeletePostingUseCase,
 
         if (optionalPosting.isEmpty()) throw new NotFoundResourceException("Posting dose not exist");
 
-        if (optionalPosting.get().isDeleted()) throw new BadRequestException("Posting already deleted");
+        Posting posting = optionalPosting.get();
 
-        return optionalPosting.get();
+        if (posting.isDeleted()) throw new BadRequestException("Posting already deleted");
+
+        return posting;
     }
 
     /**
