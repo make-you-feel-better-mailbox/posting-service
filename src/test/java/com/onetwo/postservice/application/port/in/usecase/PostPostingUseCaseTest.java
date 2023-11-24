@@ -29,7 +29,7 @@ class PostPostingUseCaseTest {
     @Mock
     private PostingUseCaseConverter postingUseCaseConverter;
 
-    private final Long postingIdx = 1L;
+    private final Long postingId = 1L;
     private final String userId = "testUserId";
     private final String content = "content";
 
@@ -39,7 +39,7 @@ class PostPostingUseCaseTest {
         //given
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
 
-        PostPostingResponseDto postPostingResponseDto = new PostPostingResponseDto(postingIdx, true);
+        PostPostingResponseDto postPostingResponseDto = new PostPostingResponseDto(postingId, true);
 
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
 

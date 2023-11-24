@@ -20,7 +20,7 @@ class PostPostingUseCaseBootTest {
     private final String content = "content";
 
     @Test
-    @DisplayName("[단위][Use Case] Posting 등록 - 성공 테스트")
+    @DisplayName("[통합][Use Case] Posting 등록 - 성공 테스트")
     void postPostingUseCaseSuccessTest() {
         //given
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);

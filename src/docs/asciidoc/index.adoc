@@ -162,3 +162,35 @@ include::{snippets}/get-detail-posting/response-body.adoc[]
 http-response
 
 include::{snippets}/get-detail-posting/http-response.adoc[]
+
+== 2. Get Filtered Posting
+
+=== Filtering Posting
+
+query-parameters
+
+include::{snippets}/filtering-posting/query-parameters.adoc[]
+
+http-request
+
+include::{snippets}/filtering-posting/http-request.adoc[]
+
+request-headers
+
+include::{snippets}/filtering-posting/request-headers.adoc[]
+
+curl-request
+
+include::{snippets}/filtering-posting/curl-request.adoc[]
+
+response-fields
+
+include::{snippets}/filtering-posting/response-fields.adoc[]
+
+response-body
+
+include::{snippets}/filtering-posting/response-body.adoc[]
+
+http-response
+
+include::{snippets}/filtering-posting/http-response.adoc[]

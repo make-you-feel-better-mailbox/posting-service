@@ -21,18 +21,18 @@ class DeletePostingCommandValidationTest {
     }
 
     @ParameterizedTest
-    @NullSource
+    @NullAndEmptySource
     @DisplayName("[단위][Command Validation] Delete Posting Command user Id Validation fail test - 실패 테스트")
-    void deletePostingCommandUserIdValidationFailTest(Long testPostingId) {
+    void deletePostingCommandUserIdValidationFailTest(String testUserId) { //
         //given when then
-        Assertions.assertThrows(ConstraintViolationException.class, () -> new DeletePostingCommand(testPostingId, userId));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> new DeletePostingCommand(postingId, testUserId));
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
+    @NullSource
     @DisplayName("[단위][Command Validation] Delete Posting Command posting Id Validation fail test - 실패 테스트")
-    void deletePostingCommandPostingIdValidationFailTest(String testUserId) {
+    void deletePostingCommandPostingIdValidationFailTest(Long testPostingId) {
         //given when then
-        Assertions.assertThrows(ConstraintViolationException.class, () -> new DeletePostingCommand(postingId, testUserId));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> new DeletePostingCommand(testPostingId, userId));
     }
 }

@@ -62,7 +62,7 @@ class PostingControllerBootTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(
-                post(GlobalUrl.POST_ROOT)
+                post(GlobalUrl.POSTING_ROOT)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postPostingRequest))
                         .headers(testHeader.getRequestHeaderWithMockAccessKey(userId))
@@ -97,7 +97,7 @@ class PostingControllerBootTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(
-                delete(GlobalUrl.POST_ROOT + "/{posting-id}", postPostingResponseDto.postingId())
+                delete(GlobalUrl.POSTING_ROOT + "/{posting-id}", postPostingResponseDto.postingId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .headers(testHeader.getRequestHeaderWithMockAccessKey(userId))
                         .accept(MediaType.APPLICATION_JSON));
@@ -111,7 +111,7 @@ class PostingControllerBootTest {
                                         headerWithName(GlobalStatus.ACCESS_TOKEN).description("유저의 access-token")
                                 ),
                                 pathParameters(
-                                        parameterWithName("posting-id").description("삭제할 posting id")
+                                        parameterWithName(GlobalUrl.PATH_VARIABLE_POSTING_ID).description("삭제할 posting id")
                                 ),
                                 responseFields(
                                         fieldWithPath("isDeleteSuccess").type(JsonFieldType.BOOLEAN).description("삭제 성공 여부")
@@ -132,7 +132,7 @@ class PostingControllerBootTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(
-                put(GlobalUrl.POST_ROOT + "/{posting-id}", postPostingResponseDto.postingId())
+                put(GlobalUrl.POSTING_ROOT + "/{posting-id}", postPostingResponseDto.postingId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .headers(testHeader.getRequestHeaderWithMockAccessKey(userId))
                         .content(objectMapper.writeValueAsString(updatePostingRequest))
@@ -147,7 +147,7 @@ class PostingControllerBootTest {
                                         headerWithName(GlobalStatus.ACCESS_TOKEN).description("유저의 access-token")
                                 ),
                                 pathParameters(
-                                        parameterWithName("posting-id").description("수정할 posting id")
+                                        parameterWithName(GlobalUrl.PATH_VARIABLE_POSTING_ID).description("수정할 posting id")
                                 ),
                                 requestFields(
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 posting 본문")
@@ -170,7 +170,7 @@ class PostingControllerBootTest {
 
         //when
         ResultActions resultActions = mockMvc.perform(
-                get(GlobalUrl.POST_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postPostingResponseDto.postingId())
+                get(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postPostingResponseDto.postingId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .headers(testHeader.getRequestHeaderWithMockAccessKey(userId))
                         .accept(MediaType.APPLICATION_JSON));
@@ -184,7 +184,7 @@ class PostingControllerBootTest {
                                         headerWithName(GlobalStatus.ACCESS_TOKEN).description("유저의 access-token")
                                 ),
                                 pathParameters(
-                                        parameterWithName("posting-id").description("조회할 posting id")
+                                        parameterWithName(GlobalUrl.PATH_VARIABLE_POSTING_ID).description("조회할 posting id")
                                 ),
                                 responseFields(
                                         fieldWithPath("postingId").type(JsonFieldType.NUMBER).description("포스팅 id"),
