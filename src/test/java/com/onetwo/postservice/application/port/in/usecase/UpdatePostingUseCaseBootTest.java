@@ -24,7 +24,7 @@ class UpdatePostingUseCaseBootTest {
     @Autowired
     private RegisterPostingPort registerPostingPort;
 
-    private final Long postingIdx = 1L;
+    private final Long postingId = 1L;
     private final String userId = "testUserId";
     private final String content = "content";
 
@@ -50,7 +50,7 @@ class UpdatePostingUseCaseBootTest {
     @DisplayName("[통합][Use Case] Posting 수정 posting does not exist - 실패 테스트")
     void updatePostingUseCasePostingDoesNotExistFailTest() {
         //given
-        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingIdx, userId, content);
+        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingId, userId, content);
 
         //when then
         Assertions.assertThrows(NotFoundResourceException.class, () -> updatePostingUseCase.updatePosting(updatePostingCommand));

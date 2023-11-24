@@ -74,7 +74,7 @@ class PostingControllerTest {
     @MockBean
     private PostingDtoMapper postingDtoMapper;
 
-    private final Long postingIdx = 1L;
+    private final Long postingId = 1L;
     private final String userId = "testUserId";
     private final String content = "content";
     private final Instant postedDate = Instant.now();
@@ -86,8 +86,8 @@ class PostingControllerTest {
         //given
         PostPostingRequest postPostingRequest = new PostPostingRequest(content);
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
-        PostPostingResponseDto postPostingResponseDto = new PostPostingResponseDto(postingIdx, true);
-        PostPostingResponse postPostingResponse = new PostPostingResponse(postingIdx, true);
+        PostPostingResponseDto postPostingResponseDto = new PostPostingResponseDto(postingId, true);
+        PostPostingResponse postPostingResponse = new PostPostingResponse(postingId, true);
 
         when(postingDtoMapper.postRequestToCommand(anyString(), any(PostPostingRequest.class))).thenReturn(postPostingCommand);
         when(postPostingUseCase.postPosting(any(PostPostingCommand.class))).thenReturn(postPostingResponseDto);
@@ -108,7 +108,7 @@ class PostingControllerTest {
     @DisplayName("[단위][Web Adapter] Posting 삭제 - 성공 테스트")
     void deletePostingSuccessTest() throws Exception {
         //given
-        DeletePostingCommand deletePostingCommand = new DeletePostingCommand(postingIdx, userId);
+        DeletePostingCommand deletePostingCommand = new DeletePostingCommand(postingId, userId);
         DeletePostingResponseDto deletePostingResponseDto = new DeletePostingResponseDto(true);
         DeletePostingResponse deletePostingResponse = new DeletePostingResponse(true);
 
@@ -117,7 +117,7 @@ class PostingControllerTest {
         when(postingDtoMapper.dtoToDeleteResponse(any(DeletePostingResponseDto.class))).thenReturn(deletePostingResponse);
         //when
         ResultActions resultActions = mockMvc.perform(
-                delete(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingIdx)
+                delete(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
         //then
@@ -131,7 +131,7 @@ class PostingControllerTest {
     void updatePostingSuccessTest() throws Exception {
         //given
         UpdatePostingRequest updatePostingRequest = new UpdatePostingRequest(content);
-        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingIdx, userId, content);
+        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingId, userId, content);
         UpdatePostingResponseDto updatePostingResponseDto = new UpdatePostingResponseDto(true);
         UpdatePostingResponse updatePostingResponse = new UpdatePostingResponse(true);
 
@@ -140,7 +140,7 @@ class PostingControllerTest {
         when(postingDtoMapper.dtoToUpdateResponse(any(UpdatePostingResponseDto.class))).thenReturn(updatePostingResponse);
         //when
         ResultActions resultActions = mockMvc.perform(
-                put(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingIdx)
+                put(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatePostingRequest))
                         .accept(MediaType.APPLICATION_JSON));
@@ -154,16 +154,16 @@ class PostingControllerTest {
     @DisplayName("[단위][Web Adapter] Posting 상세 조회 - 성공 테스트")
     void getDetailPostingSuccessTest() throws Exception {
         //given
-        FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingIdx);
-        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingIdx, userId, postedDate);
-        PostingDetailResponse postingDetailResponse = new PostingDetailResponse(postingIdx, userId, postedDate);
+        FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingId);
+        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, postedDate);
+        PostingDetailResponse postingDetailResponse = new PostingDetailResponse(postingId, userId, postedDate);
 
         when(postingDtoMapper.findRequestToCommand(anyLong())).thenReturn(findPostingDetailCommand);
         when(readPosingUseCase.findPostingDetail(any(FindPostingDetailCommand.class))).thenReturn(findPostingDetailResponseDto);
         when(postingDtoMapper.dtoToDetailResponse(any(FindPostingDetailResponseDto.class))).thenReturn(postingDetailResponse);
         //when
         ResultActions resultActions = mockMvc.perform(
-                get(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingIdx)
+                get(GlobalUrl.POSTING_ROOT + GlobalUrl.PATH_VARIABLE_POSTING_ID_WITH_BRACE, postingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
         //then
