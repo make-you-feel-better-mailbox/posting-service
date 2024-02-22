@@ -2,7 +2,7 @@ package com.onetwo.postservice.common;
 
 public class GlobalUrl {
 
-    public static final String ROOT_URI = "/";
+    public static final String ROOT_URI = "/posting-service";
     public static final String UNDER_ROUTE = "/*";
     public static final String EVERY_UNDER_ROUTE = "/**";
 
@@ -15,6 +15,6 @@ public class GlobalUrl {
     public static final String PATH_VARIABLE_SLICE = "slice-number";
     public static final String PATH_VARIABLE_SLICE_WITH_BRACE = "/{" + PATH_VARIABLE_SLICE + "}";
 
-    public static final String POSTING_ROOT = "/postings";
+    public static final String POSTING_ROOT = ROOT_URI + "/postings";
     public static final String POSTING_FILTER = POSTING_ROOT + "/filter";
 }
