@@ -11,12 +11,13 @@ class PostPostingCommandValidationTest {
 
     private final String userId = "testUserId";
     private final String content = "content";
+    private final boolean mediaExist = true;
 
     @Test
     @DisplayName("[단위][Command Validation] Post Posting Command Validation test - 성공 테스트")
     void postPostingCommandValidationTest() {
         //given when then
-        Assertions.assertDoesNotThrow(() -> new PostPostingCommand(userId, content));
+        Assertions.assertDoesNotThrow(() -> new PostPostingCommand(userId, content, mediaExist));
     }
 
     @ParameterizedTest
@@ -24,7 +25,7 @@ class PostPostingCommandValidationTest {
     @DisplayName("[단위][Command Validation] Post Posting Command user Id Validation fail test - 실패 테스트")
     void postPostingCommandUserIdValidationFailTest(String testUserId) {
         //given when then
-        Assertions.assertThrows(ConstraintViolationException.class, () -> new PostPostingCommand(testUserId, content));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> new PostPostingCommand(testUserId, content, mediaExist));
     }
 
     @ParameterizedTest
@@ -32,6 +33,6 @@ class PostPostingCommandValidationTest {
     @DisplayName("[단위][Command Validation] Post Posting Command content Validation fail test - 실패 테스트")
     void postPostingCommandContentValidationFailTest(String testContent) {
         //given when then
-        Assertions.assertThrows(ConstraintViolationException.class, () -> new PostPostingCommand(userId, testContent));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> new PostPostingCommand(userId, testContent, mediaExist));
     }
 }

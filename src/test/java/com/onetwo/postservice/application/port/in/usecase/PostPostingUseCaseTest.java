@@ -32,12 +32,13 @@ class PostPostingUseCaseTest {
     private final Long postingId = 1L;
     private final String userId = "testUserId";
     private final String content = "content";
+    private final boolean mediaExist = true;
 
     @Test
     @DisplayName("[단위][Use Case] Posting 등록 - 성공 테스트")
     void postPostingUseCaseSuccessTest() {
         //given
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
 
         PostPostingResponseDto postPostingResponseDto = new PostPostingResponseDto(postingId, true);
 

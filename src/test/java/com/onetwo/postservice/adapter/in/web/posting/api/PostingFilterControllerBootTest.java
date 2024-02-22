@@ -63,6 +63,7 @@ class PostingFilterControllerBootTest {
     private final Instant filterEndDate = Instant.parse("4000-01-01T00:00:00Z");
     private final String filterStartDatePath = "filterStartDate";
     private final String filterEndDatePath = "filterEndDate";
+    private final boolean mediaExist = true;
 
     @Test
     @Transactional
@@ -70,7 +71,7 @@ class PostingFilterControllerBootTest {
     void getFilteredPostingSuccessTest() throws Exception {
         //given
         for (int i = 1; i <= pageRequest.getPageSize(); i++) {
-            PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i);
+            PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i, mediaExist);
             postPostingUseCase.postPosting(postPostingCommand);
         }
 
@@ -111,6 +112,7 @@ class PostingFilterControllerBootTest {
                                         fieldWithPath("content[].postingId").type(JsonFieldType.NUMBER).description("Posting id"),
                                         fieldWithPath("content[].userId").type(JsonFieldType.STRING).description("Posting 작성자 user id"),
                                         fieldWithPath("content[].content").type(JsonFieldType.STRING).description("Posting의 본문"),
+                                        fieldWithPath("content[].mediaExist").type(JsonFieldType.BOOLEAN).description("post multiMedia 존재 유무"),
                                         fieldWithPath("content[].postedDate").type(JsonFieldType.STRING).description("Posting 작성 일자"),
                                         fieldWithPath("pageable").type(JsonFieldType.OBJECT).description("pageable object"),
                                         fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER).description("조회 페이지 번호"),
@@ -143,7 +145,7 @@ class PostingFilterControllerBootTest {
     void getFilteredPostingWithOutPageNumberSuccessTest() throws Exception {
         //given
         for (int i = 1; i <= pageRequest.getPageSize(); i++) {
-            PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i);
+            PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i, mediaExist);
             postPostingUseCase.postPosting(postPostingCommand);
         }
 
@@ -169,7 +171,7 @@ class PostingFilterControllerBootTest {
     void getFilteredPostingWithOutPageSizeSuccessTest() throws Exception {
         //given
         for (int i = 1; i <= pageRequest.getPageSize(); i++) {
-            PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i);
+            PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i, mediaExist);
             postPostingUseCase.postPosting(postPostingCommand);
         }
 
@@ -195,7 +197,7 @@ class PostingFilterControllerBootTest {
     void getFilteredPostingRequestNothingSuccessTest() throws Exception {
         //given
         for (int i = 1; i <= pageRequest.getPageSize(); i++) {
-            PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i);
+            PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content + i, mediaExist);
             postPostingUseCase.postPosting(postPostingCommand);
         }
 

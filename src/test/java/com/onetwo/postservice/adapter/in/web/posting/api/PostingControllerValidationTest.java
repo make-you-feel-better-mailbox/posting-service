@@ -63,6 +63,7 @@ class PostingControllerValidationTest {
     private final Long postingId = 1L;
     private final String userId = "testUserId";
     private final String content = "content";
+    private final boolean mediaExist = true;
 
     @ParameterizedTest
     @NullAndEmptySource
@@ -70,7 +71,7 @@ class PostingControllerValidationTest {
     @DisplayName("[단위][Web Adapter] Posting 등록 content validation fail - 실패 테스트")
     void postPostingContentValidationFailTest(String testContent) throws Exception {
         //given
-        PostPostingRequest postPostingRequest = new PostPostingRequest(testContent);
+        PostPostingRequest postPostingRequest = new PostPostingRequest(testContent, mediaExist);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -123,7 +124,7 @@ class PostingControllerValidationTest {
     @DisplayName("[단위][Web Adapter] Posting 수정 content validation fail - 실패 테스트")
     void updatePostingContentValidationFailTest(String testContent) throws Exception {
         //given
-        UpdatePostingRequest updatePostingRequest = new UpdatePostingRequest(testContent);
+        UpdatePostingRequest updatePostingRequest = new UpdatePostingRequest(testContent, mediaExist);
 
         //when
         ResultActions resultActions = mockMvc.perform(

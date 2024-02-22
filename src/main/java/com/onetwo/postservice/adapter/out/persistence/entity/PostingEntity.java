@@ -27,12 +27,17 @@ public class PostingEntity extends BaseEntity {
 
     @Column(nullable = false, length = 1)
     @Convert(converter = BooleanNumberConverter.class)
+    private Boolean mediaExist;
+
+    @Column(nullable = false, length = 1)
+    @Convert(converter = BooleanNumberConverter.class)
     private Boolean state;
 
-    private PostingEntity(Long id, String userId, String content, Boolean state) {
+    private PostingEntity(Long id, String userId, String content, Boolean mediaExist, Boolean state) {
         this.id = id;
         this.userId = userId;
         this.content = content;
+        this.mediaExist = mediaExist;
         this.state = state;
     }
 
@@ -41,7 +46,8 @@ public class PostingEntity extends BaseEntity {
                 posting.getId(),
                 posting.getUserId(),
                 posting.getContent(),
-                posting.getState()
+                posting.isMediaExist(),
+                posting.isState()
         );
 
         postingEntity.setMetaDataByDomain(posting);

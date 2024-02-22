@@ -14,17 +14,21 @@ import java.time.Instant;
 public class Posting extends BaseDomain {
 
     private Long id;
+
     private String userId;
 
     private String content;
 
-    private Boolean state;
+    private boolean mediaExist;
+
+    private boolean state;
 
     public static Posting createNewPostingByCommand(PostPostingCommand postPostingCommand) {
         Posting posting = new Posting(
                 null,
                 postPostingCommand.getUserId(),
                 postPostingCommand.getContent(),
+                postPostingCommand.isMediaExist(),
                 false);
 
         posting.setDefaultState();
@@ -37,6 +41,7 @@ public class Posting extends BaseDomain {
                 savedPostingEntity.getId(),
                 savedPostingEntity.getUserId(),
                 savedPostingEntity.getContent(),
+                savedPostingEntity.getMediaExist(),
                 savedPostingEntity.getState()
         );
 
@@ -70,6 +75,7 @@ public class Posting extends BaseDomain {
 
     public void updatePosting(UpdatePostingCommand updatePostingCommand) {
         this.content = updatePostingCommand.getContent();
+        this.mediaExist = updatePostingCommand.isMediaExist();
         setUpdatedAt(Instant.now());
         setUpdateUser(updatePostingCommand.getUserId());
     }

@@ -7,9 +7,9 @@ import com.onetwo.postservice.application.port.out.ReadPostingPort;
 import com.onetwo.postservice.application.port.out.UpdatePostingPort;
 import com.onetwo.postservice.application.service.converter.PostingUseCaseConverter;
 import com.onetwo.postservice.application.service.service.PostingService;
-import com.onetwo.postservice.common.exceptions.BadRequestException;
-import com.onetwo.postservice.common.exceptions.NotFoundResourceException;
 import com.onetwo.postservice.domain.Posting;
+import onetwo.mailboxcommonconfig.common.exceptions.BadRequestException;
+import onetwo.mailboxcommonconfig.common.exceptions.NotFoundResourceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,14 +42,15 @@ class UpdatePostingUseCaseTest {
     private final Long postingIdx = 1L;
     private final String userId = "testUserId";
     private final String content = "content";
+    private final boolean mediaExist = true;
 
     @Test
     @DisplayName("[단위][Use Case] Posting 수정 - 성공 테스트")
     void updatePostingUseCaseSuccessTest() {
         //given
-        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingIdx, userId, content);
+        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingIdx, userId, content, mediaExist);
 
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
 
         UpdatePostingResponseDto updatePostingResponseDto = new UpdatePostingResponseDto(true);
@@ -68,7 +69,7 @@ class UpdatePostingUseCaseTest {
     @DisplayName("[단위][Use Case] Posting 수정 posting does not exist - 실패 테스트")
     void updatePostingUseCasePostingDoesNotExistFailTest() {
         //given
-        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingIdx, userId, content);
+        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingIdx, userId, content, mediaExist);
 
         given(readPostingPort.findById(anyLong())).willReturn(Optional.empty());
 
@@ -80,8 +81,8 @@ class UpdatePostingUseCaseTest {
     @DisplayName("[단위][Use Case] Posting 수정 posting already deleted - 실패 테스트")
     void updatePostingUseCasePostingAlreadyDeletedFailTest() {
         //given
-        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingIdx, userId, content);
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingIdx, userId, content, mediaExist);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
         posting.deletePosting();
 
