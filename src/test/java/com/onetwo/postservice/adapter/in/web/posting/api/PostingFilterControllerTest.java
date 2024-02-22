@@ -68,6 +68,7 @@ class PostingFilterControllerTest {
     private final Instant filterEndDate = Instant.parse("4000-01-01T00:00:00Z");
     private final String filterStartDatePath = "filterStartDate";
     private final String filterEndDatePath = "filterEndDate";
+    private final boolean mediaExist = true;
 
     @Test
     @DisplayName("[단위][Web Adapter] Posting Filter by user 조회 성공 - 성공 테스트")
@@ -78,14 +79,14 @@ class PostingFilterControllerTest {
         List<FilteredPostingResponseDto> filteredPostingResponseDtoList = new ArrayList<>();
 
         for (int i = 1; i <= pageRequest.getPageSize(); i++) {
-            FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(i, userId, content + i, Instant.now());
+            FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(i, userId, content + i, mediaExist, Instant.now());
             filteredPostingResponseDtoList.add(testFilteredPosting);
         }
 
         Slice<FilteredPostingResponseDto> filteredPostingResponseDtoSlice = new SliceImpl<>(filteredPostingResponseDtoList, pageRequest, true);
 
         List<FilteredPostingResponse> filteredPostingResponseList = filteredPostingResponseDtoList.stream()
-                .map(responseDto -> new FilteredPostingResponse(responseDto.postingId(), responseDto.userId(), responseDto.content(), responseDto.postedDate())).toList();
+                .map(responseDto -> new FilteredPostingResponse(responseDto.postingId(), responseDto.userId(), responseDto.content(), mediaExist, responseDto.postedDate())).toList();
 
         Slice<FilteredPostingResponse> filteredPostingResponseSlice = new SliceImpl<>(filteredPostingResponseList, pageRequest, true);
 

@@ -18,12 +18,13 @@ class PostPostingUseCaseBootTest {
 
     private final String userId = "testUserId";
     private final String content = "content";
+    private final boolean mediaExist = true;
 
     @Test
     @DisplayName("[통합][Use Case] Posting 등록 - 성공 테스트")
     void postPostingUseCaseSuccessTest() {
         //given
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
 
         //when
         PostPostingResponseDto result = postPostingUseCase.postPosting(postPostingCommand);

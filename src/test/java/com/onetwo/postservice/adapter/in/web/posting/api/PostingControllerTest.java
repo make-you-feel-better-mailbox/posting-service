@@ -77,6 +77,7 @@ class PostingControllerTest {
     private final Long postingId = 1L;
     private final String userId = "testUserId";
     private final String content = "content";
+    private final boolean mediaExist = true;
     private final Instant postedDate = Instant.now();
 
     @Test
@@ -84,8 +85,8 @@ class PostingControllerTest {
     @DisplayName("[단위][Web Adapter] Posting 등록 - 성공 테스트")
     void postPostingSuccessTest() throws Exception {
         //given
-        PostPostingRequest postPostingRequest = new PostPostingRequest(content);
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingRequest postPostingRequest = new PostPostingRequest(content, mediaExist);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         PostPostingResponseDto postPostingResponseDto = new PostPostingResponseDto(postingId, true);
         PostPostingResponse postPostingResponse = new PostPostingResponse(postingId, true);
 
@@ -130,8 +131,8 @@ class PostingControllerTest {
     @DisplayName("[단위][Web Adapter] Posting 수정 - 성공 테스트")
     void updatePostingSuccessTest() throws Exception {
         //given
-        UpdatePostingRequest updatePostingRequest = new UpdatePostingRequest(content);
-        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingId, userId, content);
+        UpdatePostingRequest updatePostingRequest = new UpdatePostingRequest(content, mediaExist);
+        UpdatePostingCommand updatePostingCommand = new UpdatePostingCommand(postingId, userId, content, mediaExist);
         UpdatePostingResponseDto updatePostingResponseDto = new UpdatePostingResponseDto(true);
         UpdatePostingResponse updatePostingResponse = new UpdatePostingResponse(true);
 
@@ -155,8 +156,8 @@ class PostingControllerTest {
     void getDetailPostingSuccessTest() throws Exception {
         //given
         FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingId);
-        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, postedDate);
-        PostingDetailResponse postingDetailResponse = new PostingDetailResponse(postingId, userId, postedDate);
+        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, mediaExist, postedDate);
+        PostingDetailResponse postingDetailResponse = new PostingDetailResponse(postingId, userId, mediaExist, postedDate);
 
         when(postingDtoMapper.findRequestToCommand(anyLong())).thenReturn(findPostingDetailCommand);
         when(readPosingUseCase.findPostingDetail(any(FindPostingDetailCommand.class))).thenReturn(findPostingDetailResponseDto);

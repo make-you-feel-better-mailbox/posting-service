@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class PostingDtoMapperImpl implements PostingDtoMapper {
     @Override
     public PostPostingCommand postRequestToCommand(String userId, PostPostingRequest postPostingRequest) {
-        return new PostPostingCommand(userId, postPostingRequest.content());
+        return new PostPostingCommand(userId, postPostingRequest.content(), postPostingRequest.mediaExist());
     }
 
     @Override
@@ -40,7 +40,7 @@ public class PostingDtoMapperImpl implements PostingDtoMapper {
 
     @Override
     public UpdatePostingCommand updateRequestToCommand(Long postingId, String userId, UpdatePostingRequest deletePostingCommand) {
-        return new UpdatePostingCommand(postingId, userId, deletePostingCommand.content());
+        return new UpdatePostingCommand(postingId, userId, deletePostingCommand.content(), deletePostingCommand.mediaExist());
     }
 
     @Override
@@ -55,6 +55,6 @@ public class PostingDtoMapperImpl implements PostingDtoMapper {
 
     @Override
     public PostingDetailResponse dtoToDetailResponse(FindPostingDetailResponseDto findPostingDetailsResponseDto) {
-        return new PostingDetailResponse(findPostingDetailsResponseDto.postingId(), findPostingDetailsResponseDto.userId(), findPostingDetailsResponseDto.postedDate());
+        return new PostingDetailResponse(findPostingDetailsResponseDto.postingId(), findPostingDetailsResponseDto.userId(), findPostingDetailsResponseDto.mediaExist(), findPostingDetailsResponseDto.postedDate());
     }
 }

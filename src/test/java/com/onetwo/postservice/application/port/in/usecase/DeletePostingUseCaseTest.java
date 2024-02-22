@@ -7,9 +7,9 @@ import com.onetwo.postservice.application.port.out.ReadPostingPort;
 import com.onetwo.postservice.application.port.out.UpdatePostingPort;
 import com.onetwo.postservice.application.service.converter.PostingUseCaseConverter;
 import com.onetwo.postservice.application.service.service.PostingService;
-import com.onetwo.postservice.common.exceptions.BadRequestException;
-import com.onetwo.postservice.common.exceptions.NotFoundResourceException;
 import com.onetwo.postservice.domain.Posting;
+import onetwo.mailboxcommonconfig.common.exceptions.BadRequestException;
+import onetwo.mailboxcommonconfig.common.exceptions.NotFoundResourceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,12 +42,13 @@ class DeletePostingUseCaseTest {
     private final Long postingIdx = 1L;
     private final String userId = "testUserId";
     private final String content = "content";
+    private final boolean mediaExist = true;
 
     @Test
     @DisplayName("[단위][Use Case] Posting 삭제 - 성공 테스트")
     void deletePostingUseCaseSuccessTest() {
         //given
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
 
         DeletePostingCommand deletePostingCommand = new DeletePostingCommand(postingIdx, userId);
@@ -81,7 +82,7 @@ class DeletePostingUseCaseTest {
     void deletePostingUseCasePostingAlreadyDeletedFailTest() {
         //given
         DeletePostingCommand deletePostingCommand = new DeletePostingCommand(postingIdx, userId);
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
         posting.deletePosting();
 

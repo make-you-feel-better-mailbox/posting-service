@@ -53,12 +53,14 @@ class PostingControllerBootTest {
     private final String userId = "testUserId";
     private final String content = "content";
 
+    private final boolean mediaExist = true;
+
     @Test
     @Transactional
     @DisplayName("[통합][Web Adapter] Posting 등록 - 성공 테스트")
     void postPostingSuccessTest() throws Exception {
         //given
-        PostPostingRequest postPostingRequest = new PostPostingRequest(content);
+        PostPostingRequest postPostingRequest = new PostPostingRequest(content, mediaExist);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -77,7 +79,8 @@ class PostingControllerBootTest {
                                         headerWithName(GlobalStatus.ACCESS_TOKEN).description("유저의 access-token")
                                 ),
                                 requestFields(
-                                        fieldWithPath("content").type(JsonFieldType.STRING).description("등록할 posting 본문")
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("등록할 posting 본문"),
+                                        fieldWithPath("mediaExist").type(JsonFieldType.BOOLEAN).description("post multiMedia 존재 유무")
                                 ),
                                 responseFields(
                                         fieldWithPath("postingId").type(JsonFieldType.NUMBER).description("등록 성공시 posting id"),
@@ -92,7 +95,7 @@ class PostingControllerBootTest {
     @DisplayName("[통합][Web Adapter] Posting 삭제 - 성공 테스트")
     void deletePostingSuccessTest() throws Exception {
         //given
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         PostPostingResponseDto postPostingResponseDto = postPostingUseCase.postPosting(postPostingCommand);
 
         //when
@@ -125,10 +128,10 @@ class PostingControllerBootTest {
     @DisplayName("[통합][Web Adapter] Posting 수정 - 성공 테스트")
     void updatePostingSuccessTest() throws Exception {
         //given
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         PostPostingResponseDto postPostingResponseDto = postPostingUseCase.postPosting(postPostingCommand);
 
-        UpdatePostingRequest updatePostingRequest = new UpdatePostingRequest(content);
+        UpdatePostingRequest updatePostingRequest = new UpdatePostingRequest(content, false);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -150,7 +153,8 @@ class PostingControllerBootTest {
                                         parameterWithName(GlobalUrl.PATH_VARIABLE_POSTING_ID).description("수정할 posting id")
                                 ),
                                 requestFields(
-                                        fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 posting 본문")
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("수정할 posting 본문"),
+                                        fieldWithPath("mediaExist").type(JsonFieldType.BOOLEAN).description("post multiMedia 존재 유무")
                                 ),
                                 responseFields(
                                         fieldWithPath("isUpdateSuccess").type(JsonFieldType.BOOLEAN).description("수정 성공 여부")
@@ -165,7 +169,7 @@ class PostingControllerBootTest {
     @DisplayName("[통합][Web Adapter] Posting 상세 조회 - 성공 테스트")
     void getDetailPostingSuccessTest() throws Exception {
         //given
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         PostPostingResponseDto postPostingResponseDto = postPostingUseCase.postPosting(postPostingCommand);
 
         //when
@@ -189,6 +193,7 @@ class PostingControllerBootTest {
                                 responseFields(
                                         fieldWithPath("postingId").type(JsonFieldType.NUMBER).description("포스팅 id"),
                                         fieldWithPath("userId").type(JsonFieldType.STRING).description("등록 유저"),
+                                        fieldWithPath("mediaExist").type(JsonFieldType.BOOLEAN).description("multiMedia 존재 유무"),
                                         fieldWithPath("postedDate").type(JsonFieldType.STRING).description("등록일자")
                                 )
                         )

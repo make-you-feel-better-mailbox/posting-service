@@ -17,10 +17,13 @@ public final class UpdatePostingCommand extends SelfValidating<UpdatePostingComm
     @NotEmpty
     private final String content;
 
-    public UpdatePostingCommand(Long postingId, String userId, String content) {
+    private final boolean mediaExist;
+
+    public UpdatePostingCommand(Long postingId, String userId, String content, boolean mediaExist) {
         this.postingId = postingId;
         this.userId = userId;
         this.content = content;
+        this.mediaExist = mediaExist;
         this.validateSelf();
     }
 }

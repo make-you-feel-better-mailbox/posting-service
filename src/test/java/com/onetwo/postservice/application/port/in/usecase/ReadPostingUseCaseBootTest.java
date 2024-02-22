@@ -6,9 +6,9 @@ import com.onetwo.postservice.application.port.in.command.PostingFilterCommand;
 import com.onetwo.postservice.application.port.in.response.FilteredPostingResponseDto;
 import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
 import com.onetwo.postservice.application.port.out.RegisterPostingPort;
-import com.onetwo.postservice.common.exceptions.BadRequestException;
-import com.onetwo.postservice.common.exceptions.NotFoundResourceException;
 import com.onetwo.postservice.domain.Posting;
+import onetwo.mailboxcommonconfig.common.exceptions.BadRequestException;
+import onetwo.mailboxcommonconfig.common.exceptions.NotFoundResourceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,13 +36,14 @@ class ReadPostingUseCaseBootTest {
     private final PageRequest pageRequest = PageRequest.of(0, 20);
     private final Instant filterStartDate = Instant.parse("2000-01-01T00:00:00Z");
     private final Instant filterEndDate = Instant.parse("4000-01-01T00:00:00Z");
+    private final boolean mediaExist = true;
 
 
     @Test
     @DisplayName("[통합][Use Case] Posting 상세 조회 - 성공 테스트")
     void readDetailPostingUseCaseSuccessTest() {
         //given
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
 
         Posting savedPosting = registerPostingPort.registerPosting(posting);
@@ -71,7 +72,7 @@ class ReadPostingUseCaseBootTest {
     @DisplayName("[통합][Use Case] Posting 상세 조회 posting already deleted - 실패 테스트")
     void readDetailPostingUseCasePostingAlreadyDeletedFailTest() {
         //given
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
         posting.deletePosting();
 
@@ -89,7 +90,7 @@ class ReadPostingUseCaseBootTest {
         //given
         PostingFilterCommand postingFilterCommand = new PostingFilterCommand(userId, content, filterStartDate, filterEndDate, pageRequest);
 
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
 
         registerPostingPort.registerPosting(posting);

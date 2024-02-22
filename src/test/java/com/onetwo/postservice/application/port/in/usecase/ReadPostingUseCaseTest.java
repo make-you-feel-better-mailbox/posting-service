@@ -8,9 +8,9 @@ import com.onetwo.postservice.application.port.in.response.FindPostingDetailResp
 import com.onetwo.postservice.application.port.out.ReadPostingPort;
 import com.onetwo.postservice.application.service.converter.PostingUseCaseConverter;
 import com.onetwo.postservice.application.service.service.PostingService;
-import com.onetwo.postservice.common.exceptions.BadRequestException;
-import com.onetwo.postservice.common.exceptions.NotFoundResourceException;
 import com.onetwo.postservice.domain.Posting;
+import onetwo.mailboxcommonconfig.common.exceptions.BadRequestException;
+import onetwo.mailboxcommonconfig.common.exceptions.NotFoundResourceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,17 +49,18 @@ class ReadPostingUseCaseTest {
     private final PageRequest pageRequest = PageRequest.of(0, 20);
     private final Instant filterStartDate = Instant.parse("2000-01-01T00:00:00Z");
     private final Instant filterEndDate = Instant.parse("4000-01-01T00:00:00Z");
+    private final boolean mediaExist = true;
 
     @Test
     @DisplayName("[단위][Use Case] Posting 상세 조회 - 성공 테스트")
     void readDetailPostingUseCaseSuccessTest() {
         //given
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
 
         FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingId);
 
-        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, postedDate);
+        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, mediaExist, postedDate);
 
         given(readPostingPort.findById(anyLong())).willReturn(Optional.of(posting));
         given(postingUseCaseConverter.postingToDetailResponse(any(Posting.class))).willReturn(findPostingDetailResponseDto);
@@ -89,7 +90,7 @@ class ReadPostingUseCaseTest {
         //given
         FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingId);
 
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
         posting.deletePosting();
 
@@ -105,9 +106,9 @@ class ReadPostingUseCaseTest {
         //given
         PostingFilterCommand postingFilterCommand = new PostingFilterCommand(userId, content, filterStartDate, filterEndDate, pageRequest);
 
-        FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(postingId, userId, content, Instant.now());
+        FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(postingId, userId, content, mediaExist, Instant.now());
 
-        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content);
+        PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
 
         List<Posting> postingList = new ArrayList<>();
