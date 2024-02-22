@@ -1,4 +1,4 @@
-= User Service API Document
+= Posting Service API Document
 :doctype: book
 :source-highlighter: highlightjs
 :toc: left
@@ -24,7 +24,7 @@ endif::[]
 |===
 //표(table)의 설정 끝.
 
-[[Notice-Service-API]]
+[[Posting-Service-API]]
 == 1. Posting
 
 === Post Posting
