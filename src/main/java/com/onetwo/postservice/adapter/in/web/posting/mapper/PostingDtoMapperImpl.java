@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 public class PostingDtoMapperImpl implements PostingDtoMapper {
     @Override
     public PostPostingCommand postRequestToCommand(String userId, PostPostingRequest postPostingRequest) {
-        return new PostPostingCommand(userId, postPostingRequest.content(), postPostingRequest.mediaExist());
+        return new PostPostingCommand(userId, postPostingRequest.content(), postPostingRequest.mediaExist() != null && postPostingRequest.mediaExist());
     }
 
     @Override
