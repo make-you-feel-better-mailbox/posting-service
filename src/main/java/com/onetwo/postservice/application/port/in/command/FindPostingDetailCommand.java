@@ -1,8 +1,8 @@
 package com.onetwo.postservice.application.port.in.command;
 
-import com.onetwo.postservice.application.port.SelfValidating;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import onetwo.mailboxcommonconfig.common.SelfValidating;
 
 @Getter
 public final class FindPostingDetailCommand extends SelfValidating<FindPostingDetailCommand> {
