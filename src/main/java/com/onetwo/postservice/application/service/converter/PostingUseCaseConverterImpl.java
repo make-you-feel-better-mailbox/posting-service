@@ -23,7 +23,7 @@ public class PostingUseCaseConverterImpl implements PostingUseCaseConverter {
 
     @Override
     public FindPostingDetailResponseDto postingToDetailResponse(Posting posting) {
-        return new FindPostingDetailResponseDto(posting.getId(), posting.getUserId(), posting.isMediaExist(), posting.getCreatedAt());
+        return new FindPostingDetailResponseDto(posting.getId(), posting.getUserId(), posting.getContent(), posting.isMediaExist(), posting.getCreatedAt());
     }
 
     @Override

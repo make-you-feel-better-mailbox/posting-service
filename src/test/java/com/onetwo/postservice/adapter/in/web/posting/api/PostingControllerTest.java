@@ -156,8 +156,8 @@ class PostingControllerTest {
     void getDetailPostingSuccessTest() throws Exception {
         //given
         FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingId);
-        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, mediaExist, postedDate);
-        PostingDetailResponse postingDetailResponse = new PostingDetailResponse(postingId, userId, mediaExist, postedDate);
+        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, content, mediaExist, postedDate);
+        PostingDetailResponse postingDetailResponse = new PostingDetailResponse(postingId, userId, content, mediaExist, postedDate);
 
         when(postingDtoMapper.findRequestToCommand(anyLong())).thenReturn(findPostingDetailCommand);
         when(readPosingUseCase.findPostingDetail(any(FindPostingDetailCommand.class))).thenReturn(findPostingDetailResponseDto);

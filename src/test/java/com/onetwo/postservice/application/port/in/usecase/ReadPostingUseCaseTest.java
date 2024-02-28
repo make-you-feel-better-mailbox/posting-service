@@ -60,7 +60,7 @@ class ReadPostingUseCaseTest {
 
         FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingId);
 
-        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, mediaExist, postedDate);
+        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, content, mediaExist, postedDate);
 
         given(readPostingPort.findById(anyLong())).willReturn(Optional.of(posting));
         given(postingUseCaseConverter.postingToDetailResponse(any(Posting.class))).willReturn(findPostingDetailResponseDto);

@@ -193,6 +193,7 @@ class PostingControllerBootTest {
                                 responseFields(
                                         fieldWithPath("postingId").type(JsonFieldType.NUMBER).description("포스팅 id"),
                                         fieldWithPath("userId").type(JsonFieldType.STRING).description("등록 유저"),
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("등록 본문"),
                                         fieldWithPath("mediaExist").type(JsonFieldType.BOOLEAN).description("multiMedia 존재 유무"),
                                         fieldWithPath("postedDate").type(JsonFieldType.STRING).description("등록일자")
                                 )
