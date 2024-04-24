@@ -1,6 +1,7 @@
 package com.onetwo.postservice.adapter.in.web.posting.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onetwo.postservice.adapter.in.web.config.GrpcTestConfig;
 import com.onetwo.postservice.adapter.in.web.config.TestConfig;
 import com.onetwo.postservice.adapter.in.web.posting.mapper.PostingDtoMapper;
 import com.onetwo.postservice.adapter.in.web.posting.request.PostPostingRequest;
@@ -50,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                         SecurityConfig.class
                 })
         })
-@Import(TestConfig.class)
+@Import({TestConfig.class, GrpcTestConfig.class})
 class PostingControllerTest {
 
     @Autowired
@@ -76,6 +77,7 @@ class PostingControllerTest {
 
     private final Long postingId = 1L;
     private final String userId = "testUserId";
+    private final String userNickname = "testUsername";
     private final String content = "content";
     private final boolean mediaExist = true;
     private final Instant postedDate = Instant.now();
@@ -156,8 +158,8 @@ class PostingControllerTest {
     void getDetailPostingSuccessTest() throws Exception {
         //given
         FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingId);
-        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, content, mediaExist, postedDate);
-        PostingDetailResponse postingDetailResponse = new PostingDetailResponse(postingId, userId, content, mediaExist, postedDate);
+        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, userNickname, content, mediaExist, postedDate);
+        PostingDetailResponse postingDetailResponse = new PostingDetailResponse(postingId, userId, userNickname, content, mediaExist, postedDate);
 
         when(postingDtoMapper.findRequestToCommand(anyLong())).thenReturn(findPostingDetailCommand);
         when(readPosingUseCase.findPostingDetail(any(FindPostingDetailCommand.class))).thenReturn(findPostingDetailResponseDto);

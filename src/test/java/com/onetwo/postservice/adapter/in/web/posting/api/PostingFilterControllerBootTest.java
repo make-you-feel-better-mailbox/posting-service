@@ -1,6 +1,7 @@
 package com.onetwo.postservice.adapter.in.web.posting.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onetwo.postservice.adapter.in.web.config.GrpcTestConfig;
 import com.onetwo.postservice.adapter.in.web.config.TestHeader;
 import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
 import com.onetwo.postservice.application.port.in.usecase.PostPostingUseCase;
@@ -37,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-@Import(TestHeader.class)
+@Import({TestHeader.class, GrpcTestConfig.class})
 class PostingFilterControllerBootTest {
 
     @Autowired
@@ -111,6 +112,7 @@ class PostingFilterControllerBootTest {
                                         fieldWithPath("content[]").type(JsonFieldType.ARRAY).description("Posting List"),
                                         fieldWithPath("content[].postingId").type(JsonFieldType.NUMBER).description("Posting id"),
                                         fieldWithPath("content[].userId").type(JsonFieldType.STRING).description("Posting 작성자 user id"),
+                                        fieldWithPath("content[].userNickname").type(JsonFieldType.STRING).description("Posting 삭정자 nickname"),
                                         fieldWithPath("content[].content").type(JsonFieldType.STRING).description("Posting의 본문"),
                                         fieldWithPath("content[].mediaExist").type(JsonFieldType.BOOLEAN).description("post multiMedia 존재 유무"),
                                         fieldWithPath("content[].postedDate").type(JsonFieldType.STRING).description("Posting 작성 일자"),

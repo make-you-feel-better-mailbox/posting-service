@@ -1,6 +1,7 @@
 package com.onetwo.postservice.adapter.in.web.posting.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onetwo.postservice.adapter.in.web.config.GrpcTestConfig;
 import com.onetwo.postservice.adapter.in.web.config.TestHeader;
 import com.onetwo.postservice.adapter.in.web.posting.request.PostPostingRequest;
 import com.onetwo.postservice.adapter.in.web.posting.request.UpdatePostingRequest;
@@ -35,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-@Import(TestHeader.class)
+@Import({TestHeader.class, GrpcTestConfig.class})
 class PostingControllerBootTest {
 
     @Autowired
@@ -193,6 +194,7 @@ class PostingControllerBootTest {
                                 responseFields(
                                         fieldWithPath("postingId").type(JsonFieldType.NUMBER).description("포스팅 id"),
                                         fieldWithPath("userId").type(JsonFieldType.STRING).description("등록 유저"),
+                                        fieldWithPath("userNickname").type(JsonFieldType.STRING).description("등록 유저 nickname"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("등록 본문"),
                                         fieldWithPath("mediaExist").type(JsonFieldType.BOOLEAN).description("multiMedia 존재 유무"),
                                         fieldWithPath("postedDate").type(JsonFieldType.STRING).description("등록일자")
