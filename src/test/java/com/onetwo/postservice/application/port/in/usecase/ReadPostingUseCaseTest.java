@@ -6,6 +6,7 @@ import com.onetwo.postservice.application.port.in.command.PostingFilterCommand;
 import com.onetwo.postservice.application.port.in.response.FilteredPostingResponseDto;
 import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
 import com.onetwo.postservice.application.port.out.ReadPostingPort;
+import com.onetwo.postservice.application.port.out.ReadUserPort;
 import com.onetwo.postservice.application.service.converter.PostingUseCaseConverter;
 import com.onetwo.postservice.application.service.service.PostingService;
 import com.onetwo.postservice.domain.Posting;
@@ -26,8 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,8 +42,12 @@ class ReadPostingUseCaseTest {
     @Mock
     private PostingUseCaseConverter postingUseCaseConverter;
 
+    @Mock
+    private ReadUserPort readUserPort;
+
     private final Long postingId = 1L;
     private final String userId = "testUserId";
+    private final String userNickname = "testUsername";
     private final String content = "content";
     private final Instant postedDate = Instant.now();
     private final PageRequest pageRequest = PageRequest.of(0, 20);
@@ -60,10 +64,11 @@ class ReadPostingUseCaseTest {
 
         FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingId);
 
-        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, content, mediaExist, postedDate);
+        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, userNickname, content, mediaExist, postedDate);
 
         given(readPostingPort.findById(anyLong())).willReturn(Optional.of(posting));
-        given(postingUseCaseConverter.postingToDetailResponse(any(Posting.class))).willReturn(findPostingDetailResponseDto);
+        given(postingUseCaseConverter.postingToDetailResponse(any(Posting.class), anyString())).willReturn(findPostingDetailResponseDto);
+        given(readUserPort.getUserNickname(anyString())).willReturn(userNickname);
         //when
         FindPostingDetailResponseDto result = readPostingUseCase.findPostingDetail(findPostingDetailCommand);
 
@@ -106,7 +111,7 @@ class ReadPostingUseCaseTest {
         //given
         PostingFilterCommand postingFilterCommand = new PostingFilterCommand(userId, content, filterStartDate, filterEndDate, pageRequest);
 
-        FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(postingId, userId, content, mediaExist, Instant.now());
+        FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(postingId, userId, userNickname, content, mediaExist, Instant.now());
 
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
@@ -115,7 +120,8 @@ class ReadPostingUseCaseTest {
         postingList.add(posting);
 
         given(readPostingPort.filterPosting(any(PostingFilterCommand.class))).willReturn(postingList);
-        given(postingUseCaseConverter.postingToFilteredResponse(any(Posting.class))).willReturn(testFilteredPosting);
+        given(postingUseCaseConverter.postingToFilteredResponse(any(Posting.class), anyString())).willReturn(testFilteredPosting);
+        given(readUserPort.getUserNickname(anyString())).willReturn(userNickname);
         //when
         Slice<FilteredPostingResponseDto> result = readPostingUseCase.filterPosting(postingFilterCommand);
 

@@ -10,7 +10,7 @@ public interface PostingUseCaseConverter {
 
     UpdatePostingResponseDto postingToUpdateResponseDto(boolean isUpdateSuccess);
 
-    FindPostingDetailResponseDto postingToDetailResponse(Posting posting);
+    FindPostingDetailResponseDto postingToDetailResponse(Posting posting, String userNickname);
 
-    FilteredPostingResponseDto postingToFilteredResponse(Posting posting);
+    FilteredPostingResponseDto postingToFilteredResponse(Posting posting, String userNickname);
 }

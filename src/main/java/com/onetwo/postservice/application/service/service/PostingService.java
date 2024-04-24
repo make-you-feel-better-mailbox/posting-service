@@ -7,6 +7,7 @@ import com.onetwo.postservice.application.port.in.usecase.PostPostingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.ReadPosingUseCase;
 import com.onetwo.postservice.application.port.in.usecase.UpdatePostingUseCase;
 import com.onetwo.postservice.application.port.out.ReadPostingPort;
+import com.onetwo.postservice.application.port.out.ReadUserPort;
 import com.onetwo.postservice.application.port.out.RegisterPostingPort;
 import com.onetwo.postservice.application.port.out.UpdatePostingPort;
 import com.onetwo.postservice.application.service.converter.PostingUseCaseConverter;
@@ -29,6 +30,7 @@ public class PostingService implements PostPostingUseCase, DeletePostingUseCase,
     private final RegisterPostingPort registerPostingPort;
     private final ReadPostingPort readPostingPort;
     private final UpdatePostingPort updatePostingPort;
+    private final ReadUserPort readUserPort;
     private final PostingUseCaseConverter postingUseCaseConverter;
 
     /**
@@ -104,7 +106,9 @@ public class PostingService implements PostPostingUseCase, DeletePostingUseCase,
     public FindPostingDetailResponseDto findPostingDetail(FindPostingDetailCommand findPostingDetailCommand) {
         Posting posting = checkPostingExistAndGetPosting(findPostingDetailCommand.getPostingId());
 
-        return postingUseCaseConverter.postingToDetailResponse(posting);
+        String userNickname = readUserPort.getUserNickname(posting.getUserId());
+
+        return postingUseCaseConverter.postingToDetailResponse(posting, userNickname);
     }
 
     private Posting checkPostingExistAndGetPosting(Long postingId) {
@@ -136,7 +140,10 @@ public class PostingService implements PostPostingUseCase, DeletePostingUseCase,
         if (hasNext) postingList.remove(postingList.size() - 1);
 
         List<FilteredPostingResponseDto> filteredPostingResponseDtoList = postingList.stream()
-                .map(postingUseCaseConverter::postingToFilteredResponse).toList();
+                .map(e -> {
+                    String userNickname = readUserPort.getUserNickname(e.getUserId());
+                    return postingUseCaseConverter.postingToFilteredResponse(e, userNickname);
+                }).toList();
 
         return new SliceImpl<>(filteredPostingResponseDtoList, postingFilterCommand.getPageable(), hasNext);
     }

@@ -1,5 +1,6 @@
 package com.onetwo.postservice.application.port.in.usecase;
 
+import com.onetwo.postservice.adapter.in.web.config.GrpcTestConfig;
 import com.onetwo.postservice.application.port.in.command.FindPostingDetailCommand;
 import com.onetwo.postservice.application.port.in.command.PostPostingCommand;
 import com.onetwo.postservice.application.port.in.command.PostingFilterCommand;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import java.time.Instant;
 
 @SpringBootTest
 @Transactional
+@Import(GrpcTestConfig.class)
 class ReadPostingUseCaseBootTest {
 
     @Autowired
