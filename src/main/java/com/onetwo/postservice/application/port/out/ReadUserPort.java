@@ -1,5 +1,7 @@
 package com.onetwo.postservice.application.port.out;
 
+import com.onetwo.postservice.application.port.out.dto.UserInfoResponse;
+
 public interface ReadUserPort {
-    String getUserNickname(String userId);
+    UserInfoResponse getUserInfo(String userId);
 }

@@ -1,6 +1,7 @@
 package com.onetwo.postservice.application.service.converter;
 
 import com.onetwo.postservice.application.port.in.response.*;
+import com.onetwo.postservice.application.port.out.dto.UserInfoResponse;
 import com.onetwo.postservice.domain.Posting;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +23,12 @@ public class PostingUseCaseConverterImpl implements PostingUseCaseConverter {
     }
 
     @Override
-    public FindPostingDetailResponseDto postingToDetailResponse(Posting posting, String userNickname) {
-        return new FindPostingDetailResponseDto(posting.getId(), posting.getUserId(), userNickname, posting.getContent(), posting.isMediaExist(), posting.getCreatedAt());
+    public FindPostingDetailResponseDto postingToDetailResponse(Posting posting, UserInfoResponse userInfo) {
+        return new FindPostingDetailResponseDto(posting.getId(), posting.getUserId(), userInfo.userNickname(), userInfo.userProfileImageEndPoint(), posting.getContent(), posting.isMediaExist(), posting.getCreatedAt());
     }
 
     @Override
-    public FilteredPostingResponseDto postingToFilteredResponse(Posting posting, String userNickname) {
-        return new FilteredPostingResponseDto(posting.getId(), posting.getUserId(), userNickname, posting.getContent(), posting.isMediaExist(), posting.getCreatedAt());
+    public FilteredPostingResponseDto postingToFilteredResponse(Posting posting, UserInfoResponse userInfo) {
+        return new FilteredPostingResponseDto(posting.getId(), posting.getUserId(), userInfo.userNickname(), userInfo.userProfileImageEndPoint(), posting.getContent(), posting.isMediaExist(), posting.getCreatedAt());
     }
 }

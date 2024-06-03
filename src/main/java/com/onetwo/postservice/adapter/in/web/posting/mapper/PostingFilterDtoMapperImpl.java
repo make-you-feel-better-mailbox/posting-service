@@ -31,7 +31,14 @@ public class PostingFilterDtoMapperImpl implements PostingFilterDtoMapper {
     @Override
     public Slice<FilteredPostingResponse> dtoToFilteredPostingResponse(Slice<FilteredPostingResponseDto> filterPostingByUserDto) {
         List<FilteredPostingResponse> filteredPostingResponseList = filterPostingByUserDto.getContent().stream()
-                .map(response -> new FilteredPostingResponse(response.postingId(), response.userId(), response.userNickname(), response.content(), response.mediaExist(), response.postedDate())).toList();
+                .map(response -> new FilteredPostingResponse(
+                        response.postingId(),
+                        response.userId(),
+                        response.userNickname(),
+                        response.userProfileImageEndPoint(),
+                        response.content(),
+                        response.mediaExist(),
+                        response.postedDate())).toList();
 
         return new SliceImpl<>(filteredPostingResponseList, filterPostingByUserDto.getPageable(), filterPostingByUserDto.hasNext());
     }

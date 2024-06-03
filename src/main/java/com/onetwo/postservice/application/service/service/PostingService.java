@@ -10,6 +10,7 @@ import com.onetwo.postservice.application.port.out.ReadPostingPort;
 import com.onetwo.postservice.application.port.out.ReadUserPort;
 import com.onetwo.postservice.application.port.out.RegisterPostingPort;
 import com.onetwo.postservice.application.port.out.UpdatePostingPort;
+import com.onetwo.postservice.application.port.out.dto.UserInfoResponse;
 import com.onetwo.postservice.application.service.converter.PostingUseCaseConverter;
 import com.onetwo.postservice.domain.Posting;
 import lombok.RequiredArgsConstructor;
@@ -106,9 +107,9 @@ public class PostingService implements PostPostingUseCase, DeletePostingUseCase,
     public FindPostingDetailResponseDto findPostingDetail(FindPostingDetailCommand findPostingDetailCommand) {
         Posting posting = checkPostingExistAndGetPosting(findPostingDetailCommand.getPostingId());
 
-        String userNickname = readUserPort.getUserNickname(posting.getUserId());
+        UserInfoResponse userInfo = readUserPort.getUserInfo(posting.getUserId());
 
-        return postingUseCaseConverter.postingToDetailResponse(posting, userNickname);
+        return postingUseCaseConverter.postingToDetailResponse(posting, userInfo);
     }
 
     private Posting checkPostingExistAndGetPosting(Long postingId) {
@@ -137,12 +138,12 @@ public class PostingService implements PostPostingUseCase, DeletePostingUseCase,
 
         boolean hasNext = postingList.size() > postingFilterCommand.getPageable().getPageSize();
 
-        if (hasNext) postingList.remove(postingList.size() - 1);
+        if (hasNext) postingList.removeLast();
 
         List<FilteredPostingResponseDto> filteredPostingResponseDtoList = postingList.stream()
                 .map(e -> {
-                    String userNickname = readUserPort.getUserNickname(e.getUserId());
-                    return postingUseCaseConverter.postingToFilteredResponse(e, userNickname);
+                    UserInfoResponse userInfo = readUserPort.getUserInfo(e.getUserId());
+                    return postingUseCaseConverter.postingToFilteredResponse(e, userInfo);
                 }).toList();
 
         return new SliceImpl<>(filteredPostingResponseDtoList, postingFilterCommand.getPageable(), hasNext);

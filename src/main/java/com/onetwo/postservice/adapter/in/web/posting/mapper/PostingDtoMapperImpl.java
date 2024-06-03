@@ -55,6 +55,6 @@ public class PostingDtoMapperImpl implements PostingDtoMapper {
 
     @Override
     public PostingDetailResponse dtoToDetailResponse(FindPostingDetailResponseDto findPostingDetailsResponseDto) {
-        return new PostingDetailResponse(findPostingDetailsResponseDto.postingId(), findPostingDetailsResponseDto.userId(), findPostingDetailsResponseDto.userNickname(), findPostingDetailsResponseDto.content(), findPostingDetailsResponseDto.mediaExist(), findPostingDetailsResponseDto.postedDate());
+        return new PostingDetailResponse(findPostingDetailsResponseDto.postingId(), findPostingDetailsResponseDto.userId(), findPostingDetailsResponseDto.userNickname(), findPostingDetailsResponseDto.userProfileImageEndPoint(), findPostingDetailsResponseDto.content(), findPostingDetailsResponseDto.mediaExist(), findPostingDetailsResponseDto.postedDate());
     }
 }

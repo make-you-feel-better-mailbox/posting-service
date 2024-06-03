@@ -2,7 +2,11 @@ package com.onetwo.postservice.application.port.in.response;
 
 import java.time.Instant;
 
-public record FindPostingDetailResponseDto(long postingId, String userId, String userNickname, String content,
+public record FindPostingDetailResponseDto(long postingId,
+                                           String userId,
+                                           String userNickname,
+                                           String userProfileImageEndPoint,
+                                           String content,
                                            boolean mediaExist,
                                            Instant postedDate) {
 }

@@ -81,6 +81,7 @@ class PostingControllerTest {
     private final String content = "content";
     private final boolean mediaExist = true;
     private final Instant postedDate = Instant.now();
+    private final String profileImageEndPoint = "/assets/images/avatars/avatar-2.jpg";
 
     @Test
     @WithMockUser(username = userId)
@@ -158,8 +159,8 @@ class PostingControllerTest {
     void getDetailPostingSuccessTest() throws Exception {
         //given
         FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingId);
-        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, userNickname, content, mediaExist, postedDate);
-        PostingDetailResponse postingDetailResponse = new PostingDetailResponse(postingId, userId, userNickname, content, mediaExist, postedDate);
+        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, userNickname, profileImageEndPoint, content, mediaExist, postedDate);
+        PostingDetailResponse postingDetailResponse = new PostingDetailResponse(postingId, userId, userNickname, profileImageEndPoint, content, mediaExist, postedDate);
 
         when(postingDtoMapper.findRequestToCommand(anyLong())).thenReturn(findPostingDetailCommand);
         when(readPosingUseCase.findPostingDetail(any(FindPostingDetailCommand.class))).thenReturn(findPostingDetailResponseDto);

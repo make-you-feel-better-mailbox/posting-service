@@ -70,6 +70,7 @@ class PostingFilterControllerTest {
     private final String filterStartDatePath = "filterStartDate";
     private final String filterEndDatePath = "filterEndDate";
     private final boolean mediaExist = true;
+    private final String profileImageEndPoint = "/assets/images/avatars/avatar-2.jpg";
 
     @Test
     @DisplayName("[단위][Web Adapter] Posting Filter by user 조회 성공 - 성공 테스트")
@@ -80,14 +81,14 @@ class PostingFilterControllerTest {
         List<FilteredPostingResponseDto> filteredPostingResponseDtoList = new ArrayList<>();
 
         for (int i = 1; i <= pageRequest.getPageSize(); i++) {
-            FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(i, userId, userNickname, content + i, mediaExist, Instant.now());
+            FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(i, userId, userNickname, profileImageEndPoint, content + i, mediaExist, Instant.now());
             filteredPostingResponseDtoList.add(testFilteredPosting);
         }
 
         Slice<FilteredPostingResponseDto> filteredPostingResponseDtoSlice = new SliceImpl<>(filteredPostingResponseDtoList, pageRequest, true);
 
         List<FilteredPostingResponse> filteredPostingResponseList = filteredPostingResponseDtoList.stream()
-                .map(responseDto -> new FilteredPostingResponse(responseDto.postingId(), responseDto.userId(), userNickname, responseDto.content(), mediaExist, responseDto.postedDate())).toList();
+                .map(responseDto -> new FilteredPostingResponse(responseDto.postingId(), responseDto.userId(), userNickname, profileImageEndPoint, responseDto.content(), mediaExist, responseDto.postedDate())).toList();
 
         Slice<FilteredPostingResponse> filteredPostingResponseSlice = new SliceImpl<>(filteredPostingResponseList, pageRequest, true);
 

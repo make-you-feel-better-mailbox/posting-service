@@ -7,6 +7,7 @@ import com.onetwo.postservice.application.port.in.response.FilteredPostingRespon
 import com.onetwo.postservice.application.port.in.response.FindPostingDetailResponseDto;
 import com.onetwo.postservice.application.port.out.ReadPostingPort;
 import com.onetwo.postservice.application.port.out.ReadUserPort;
+import com.onetwo.postservice.application.port.out.dto.UserInfoResponse;
 import com.onetwo.postservice.application.service.converter.PostingUseCaseConverter;
 import com.onetwo.postservice.application.service.service.PostingService;
 import com.onetwo.postservice.domain.Posting;
@@ -54,6 +55,8 @@ class ReadPostingUseCaseTest {
     private final Instant filterStartDate = Instant.parse("2000-01-01T00:00:00Z");
     private final Instant filterEndDate = Instant.parse("4000-01-01T00:00:00Z");
     private final boolean mediaExist = true;
+    private final String profileImageEndPoint = "/assets/images/avatars/avatar-2.jpg";
+    private final UserInfoResponse userInfoResponse = new UserInfoResponse(userNickname, profileImageEndPoint);
 
     @Test
     @DisplayName("[단위][Use Case] Posting 상세 조회 - 성공 테스트")
@@ -64,11 +67,11 @@ class ReadPostingUseCaseTest {
 
         FindPostingDetailCommand findPostingDetailCommand = new FindPostingDetailCommand(postingId);
 
-        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, userNickname, content, mediaExist, postedDate);
+        FindPostingDetailResponseDto findPostingDetailResponseDto = new FindPostingDetailResponseDto(postingId, userId, userNickname, profileImageEndPoint, content, mediaExist, postedDate);
 
         given(readPostingPort.findById(anyLong())).willReturn(Optional.of(posting));
-        given(postingUseCaseConverter.postingToDetailResponse(any(Posting.class), anyString())).willReturn(findPostingDetailResponseDto);
-        given(readUserPort.getUserNickname(anyString())).willReturn(userNickname);
+        given(postingUseCaseConverter.postingToDetailResponse(any(Posting.class), any(UserInfoResponse.class))).willReturn(findPostingDetailResponseDto);
+        given(readUserPort.getUserInfo(anyString())).willReturn(userInfoResponse);
         //when
         FindPostingDetailResponseDto result = readPostingUseCase.findPostingDetail(findPostingDetailCommand);
 
@@ -111,7 +114,7 @@ class ReadPostingUseCaseTest {
         //given
         PostingFilterCommand postingFilterCommand = new PostingFilterCommand(userId, content, filterStartDate, filterEndDate, pageRequest);
 
-        FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(postingId, userId, userNickname, content, mediaExist, Instant.now());
+        FilteredPostingResponseDto testFilteredPosting = new FilteredPostingResponseDto(postingId, userId, userNickname, profileImageEndPoint, content, mediaExist, Instant.now());
 
         PostPostingCommand postPostingCommand = new PostPostingCommand(userId, content, mediaExist);
         Posting posting = Posting.createNewPostingByCommand(postPostingCommand);
@@ -120,8 +123,8 @@ class ReadPostingUseCaseTest {
         postingList.add(posting);
 
         given(readPostingPort.filterPosting(any(PostingFilterCommand.class))).willReturn(postingList);
-        given(postingUseCaseConverter.postingToFilteredResponse(any(Posting.class), anyString())).willReturn(testFilteredPosting);
-        given(readUserPort.getUserNickname(anyString())).willReturn(userNickname);
+        given(postingUseCaseConverter.postingToFilteredResponse(any(Posting.class), any(UserInfoResponse.class))).willReturn(testFilteredPosting);
+        given(readUserPort.getUserInfo(anyString())).willReturn(userInfoResponse);
         //when
         Slice<FilteredPostingResponseDto> result = readPostingUseCase.filterPosting(postingFilterCommand);
 

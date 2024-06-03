@@ -1,6 +1,7 @@
 package com.onetwo.postservice.application.service.converter;
 
 import com.onetwo.postservice.application.port.in.response.*;
+import com.onetwo.postservice.application.port.out.dto.UserInfoResponse;
 import com.onetwo.postservice.domain.Posting;
 
 public interface PostingUseCaseConverter {
@@ -10,7 +11,7 @@ public interface PostingUseCaseConverter {
 
     UpdatePostingResponseDto postingToUpdateResponseDto(boolean isUpdateSuccess);
 
-    FindPostingDetailResponseDto postingToDetailResponse(Posting posting, String userNickname);
+    FindPostingDetailResponseDto postingToDetailResponse(Posting posting, UserInfoResponse userInfo);
 
-    FilteredPostingResponseDto postingToFilteredResponse(Posting posting, String userNickname);
+    FilteredPostingResponseDto postingToFilteredResponse(Posting posting, UserInfoResponse userInfo);
 }
